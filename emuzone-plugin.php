@@ -9,3 +9,25 @@ Author: ghdpro
 Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
 */
+
+
+function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
+	if ( ! empty( $editor_context->post ) ) {
+		array_push(
+			$block_categories,
+			array(
+				'slug'  => 'emuzone',
+				'title' => __( 'The Emulator Zone', 'emuzone-plugin' ),
+				'icon'  => null,
+			)
+		);
+	}
+	return $block_categories;
+}
+add_filter( 'block_categories_all', 'filter_block_categories_when_post_provided', 10, 2 );
+
+
+function create_block_emuzone_plugin_block_init() {
+	register_block_type( plugin_dir_path( __FILE__ ) . 'blocks/voting/' );
+}
+add_action( 'init', 'create_block_emuzone_plugin_block_init' );
