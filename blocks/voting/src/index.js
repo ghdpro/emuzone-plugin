@@ -4,6 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 import { registerBlockType } from '@wordpress/blocks';
+import { TextControl } from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -17,8 +18,7 @@ import './style.scss';
 /**
  * Internal dependencies
  */
-import Edit from './edit';
-import save from './save';
+import {useBlockProps} from "@wordpress/block-editor";
 
 /**
  * Every block starts by registering a new block type definition.
@@ -26,13 +26,31 @@ import save from './save';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType('emuzone-plugin/voting', {
-	/**
-	 * @see ./edit.js
-	 */
-	edit: Edit,
+	attributes: {
+		voteID: {
+			type: 'string',
+			source: 'text',
+			default: ''
+		}
+	},
+	edit: ( { attributes, setAttributes } ) => {
+		const blockProps = useBlockProps();
+		const updateFieldValue = ( val ) => {
+			setAttributes( { voteID: val } );
+		}
+		return (
+			<p { ...blockProps }>
+				<TextControl
+					label='Vote ID'
+					value={ attributes.voteID }
+					onChange={ updateFieldValue }
+				/>
+			</p>
+		);
+	},
+	save: ( { attributes } ) => {
+		const blockProps = useBlockProps.save();
 
-	/**
-	 * @see ./save.js
-	 */
-	save,
+		return <div { ...blockProps }> { attributes.voteID } </div>;
+	},
 });
