@@ -1,7 +1,7 @@
 {
 	"apiVersion": 2,
 	"name": "emuzone-plugin/voting",
-	"version": "0.1.0",
+	"version": "0.0.1",
 	"title": "EZ Voting",
 	"category": "emuzone",
 	"icon": "star-filled",
@@ -10,7 +10,7 @@
 		"html": false
 	},
 	"textdomain": "emuzone-plugin",
-	"editorScript": "file:./build/index.js",
-	"editorStyle": "file:./build/index.css",
-	"style": "file:./build/style-index.css"
+	"editorScript": "file:build/index.js",
+	"editorStyle": "file:build/index.css",
+	"style": "file:build/style-index.css"
 }
