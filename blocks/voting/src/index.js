@@ -4,7 +4,6 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps } from "@wordpress/block-editor";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -29,14 +28,8 @@ registerBlockType('emuzone-plugin/voting', {
 	attributes: {
 		voteID: {
 			type: 'string',
-			source: 'text',
 			default: ''
 		}
 	},
-	edit: Edit,
-	save: ( { attributes } ) => {
-		const blockProps = useBlockProps.save();
-
-		return <div { ...blockProps }> { attributes.voteID } </div>;
-	},
+	edit: Edit
 });

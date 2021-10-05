@@ -1,16 +1,16 @@
 {
-	"apiVersion": 2,
-	"name": "emuzone-plugin/voting",
-	"version": "0.0.1",
-	"title": "EZ Voting",
-	"category": "emuzone",
-	"icon": "star-filled",
-	"description": "The Emulator Zone emulator voting feature",
-	"supports": {
-		"html": false
-	},
-	"textdomain": "emuzone-plugin",
-	"editorScript": "file:build/index.js",
-	"editorStyle": "file:build/index.css",
-	"style": "file:build/style-index.css"
+  "apiVersion": 2,
+  "name": "emuzone-plugin/voting",
+  "version": "0.0.1",
+  "title": "EZ Voting",
+  "category": "emuzone",
+  "icon": "star-filled",
+  "description": "The Emulator Zone emulator voting feature",
+  "supports": {
+	"html": false
+  },
+  "textdomain": "emuzone-plugin",
+  "editorScript": "file:build/index.js",
+  "editorStyle": "file:build/index.css",
+  "style": "file:build/style-index.css"
 }
