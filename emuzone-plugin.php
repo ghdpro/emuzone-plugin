@@ -15,6 +15,18 @@ function emuzone_plugin_voting_block_callback( $attributes, $content ) {
 	return '<div>'.print_r($attributes, true) . $content . date( 'U' ).'</div>';
 }
 
+function emuzone_plugin_section_block_callback( $attributes, $content ) {
+	$output = '';
+	// Get "Section"
+	$emulators = get_field('emulator');
+	foreach ($emulators as $emulator)
+	{
+		// Get "field" on related page
+		$field = get_field('emulator', $emulator->ID);
+		$output .=  '<div>' . $field . '</div>';
+	}
+	return $output;
+}
 
 function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {
@@ -35,6 +47,9 @@ add_filter( 'block_categories_all', 'filter_block_categories_when_post_provided'
 function emuzone_plugin_block_init() {
 	register_block_type( plugin_dir_path( __FILE__ ) . 'blocks/voting/', array(
 		'render_callback' => 'emuzone_plugin_voting_block_callback'
+	));
+	register_block_type( plugin_dir_path( __FILE__ ) . 'blocks/section/', array(
+		'render_callback' => 'emuzone_plugin_section_block_callback'
 	));
 }
 add_action( 'init', 'emuzone_plugin_block_init' );
