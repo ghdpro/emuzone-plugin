@@ -10,8 +10,8 @@ Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
 */
 
-require_once( plugin_dir_path( __FILE__ ) . 'inc/render-callback-block-voting.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'inc/render-callback-block-section.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'blocks/section/render-callback.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'blocks/voting/render-callback.php' );
 
 function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {
