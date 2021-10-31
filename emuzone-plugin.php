@@ -36,7 +36,7 @@ function emuzone_plugin_block_init() {
 		'category' => 'emuzone',
 		'icon' => 'index-card',
 		'mode' => 'edit',
-		'render_callback' => 'emuzone_plugin_section_block_callback',
+		'render_callback' => 'emuzone_plugin_block_section_callback',
 		'supports' => array(
 			'align' => false,
 		)
@@ -48,7 +48,7 @@ function emuzone_plugin_block_init() {
 		'category' => 'emuzone',
 		'icon' => 'star-filled',
 		'mode' => 'edit',
-		'render_callback' => 'emuzone_plugin_voting_block_callback',
+		'render_callback' => 'emuzone_plugin_block_voting_callback',
 		'supports' => array(
 			'align' => false,
 		)

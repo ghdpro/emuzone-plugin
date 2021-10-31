@@ -1,6 +1,6 @@
 <?php
 
-function emuzone_plugin_section_block_callback( $block, $content = '', $is_preview = false, $post_id = 0 ) {
+function emuzone_plugin_block_section_callback( $block, $content = '', $is_preview = false, $post_id = 0 ) {
 	$output = '';
 	// Get "Section"
 	$emulators = get_field('emulator');
