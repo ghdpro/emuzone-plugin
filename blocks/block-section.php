@@ -1,6 +1,6 @@
 <?php
 
-function emuzone_plugin_section_block_callback( $attributes, $content ) {
+function emuzone_plugin_section_block_callback( $block, $content = '', $is_preview = false, $post_id = 0 ) {
 	$output = '';
 	// Get "Section"
 	$emulators = get_field('emulator');
@@ -13,5 +13,5 @@ function emuzone_plugin_section_block_callback( $attributes, $content ) {
 			$output .=  '<div> {' . $field . '} </div>';
 		}
 	}
-	return $output;
+	echo $output;
 }
