@@ -55,3 +55,26 @@ function emuzone_plugin_block_init() {
 	) );
 }
 add_action( 'acf/init', 'emuzone_plugin_block_init' );
+
+if ( ! function_exists( 'emuzone_plugin_scripts' ) ) :
+	function emuzone_plugin_scripts() {
+		$plugin = get_plugin_data( __FILE__ );
+		wp_enqueue_style(
+			'emuzone-plugin',
+			plugins_url( 'css/emuzone-plugin.css',  __FILE__ ),
+			array(),
+			$plugin[ 'Version' ]
+		);
+	}
+endif;
+add_action( 'wp_enqueue_scripts', 'emuzone_plugin_scripts' );
+
+require_once( plugin_dir_path( __FILE__ ) . '/classes/class-topdownloadswidget.php' );
+
+if ( ! function_exists( 'emuzone_plugin_widgets_init' ) ) :
+	function emuzone_plugin_widgets_init() {
+		register_widget( 'TopDownloadsWidget' );
+	}
+endif;
+add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
+
