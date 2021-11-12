@@ -64,4 +64,3 @@ if ( ! function_exists( 'emuzone_plugin_widgets_init' ) ) :
 	}
 endif;
 add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
-
