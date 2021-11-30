@@ -1,0 +1,45 @@
+[
+    {
+        "key": "group_617ef39b9a14c",
+        "title": "Voting",
+        "fields": [
+            {
+                "key": "field_617ef3a2bfff4",
+                "label": "Vote ID",
+                "name": "vote_id",
+                "type": "text",
+                "instructions": "Leave blank, use Vote ID field at the bottom of the page instead.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "block",
+                    "operator": "==",
+                    "value": "acf\/emuzone-plugin-voting"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

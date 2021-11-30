@@ -1,0 +1,51 @@
+[
+    {
+        "key": "group_61620a20b3b64",
+        "title": "Section",
+        "fields": [
+            {
+                "key": "field_61620a3625ba8",
+                "label": "Emulator",
+                "name": "emulator",
+                "type": "relationship",
+                "instructions": "Select which emulator pages should be listed in the section block.",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "page"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search"
+                ],
+                "elements": "",
+                "min": "",
+                "max": "",
+                "return_format": "object"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "block",
+                    "operator": "==",
+                    "value": "acf\/emuzone-plugin-section"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

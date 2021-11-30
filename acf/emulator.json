@@ -1,0 +1,165 @@
+[
+    {
+        "key": "group_61620a4feccbd",
+        "title": "Emulator",
+        "fields": [
+            {
+                "key": "field_619b44c602a2c",
+                "label": "Name",
+                "name": "emulator_name",
+                "type": "text",
+                "instructions": "Leave blank, unless you want to override the name used on section pages. When left blank the page title is used instead.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": ""
+            },
+            {
+                "key": "field_619b44d602a2d",
+                "label": "Description",
+                "name": "emulator_description",
+                "type": "text",
+                "instructions": "Useful description for the emulator. Leave blank if there is nothing useful to say about the emulator. Should never be generic \"[console] emulator\".",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": ""
+            },
+            {
+                "key": "field_619b4502799bd",
+                "label": "Platform",
+                "name": "emulator_platform",
+                "type": "select",
+                "instructions": "Choose up to three values. If more than three values are required, select \"Multi-platform\". The value \"Multi-platform\" should not be combined with other choices.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "[icon name=windows prefix=fab] Windows": "[icon name=windows prefix=fab] Windows",
+                    "[icon name=apple prefix=fab] MacOS": "[icon name=apple prefix=fab] MacOS",
+                    "[icon name=linux prefix=fab] Linux": "[icon name=linux prefix=fab] Linux",
+                    "[icon name=android prefix=fab] Android": "[icon name=android prefix=fab] Android",
+                    "[icon name=terminal] DOS": "[icon name=terminal] DOS",
+                    "[icon name=arrows-alt] Multi-platform": "[icon name=arrows-alt] Multi-platform"
+                },
+                "default_value": [],
+                "allow_null": 0,
+                "multiple": 1,
+                "ui": 0,
+                "return_format": "value",
+                "ajax": 0,
+                "placeholder": ""
+            },
+            {
+                "key": "field_619b455b799be",
+                "label": "License",
+                "name": "emulator_license",
+                "type": "select",
+                "instructions": "Select license which most closely approximates the distribution license for the emulator.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "Open-Source": "Open-Source",
+                    "Freeware": "Freeware",
+                    "Shareware": "Shareware",
+                    "Demo": "Demo",
+                    "Commercial\/Paid": "Commercial\/Paid"
+                },
+                "default_value": false,
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "return_format": "value",
+                "ajax": 0,
+                "placeholder": ""
+            },
+            {
+                "key": "field_619b45da799c0",
+                "label": "Vote ID",
+                "name": "emulator_vote_id",
+                "type": "text",
+                "instructions": "Slug\/handle for the vote ID of the emulator. Should be lowercase alphanumeric only (a-z, 0-9, plus underscore and dash).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": ""
+            },
+            {
+                "key": "field_619b4596799bf",
+                "label": "Recommended",
+                "name": "emulator_recommended",
+                "type": "relationship",
+                "instructions": "Select the section pages on which this emulator will have a \"Recommended\" mark.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "page"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search"
+                ],
+                "elements": "",
+                "min": "",
+                "max": "",
+                "return_format": "id"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_type",
+                    "operator": "==",
+                    "value": "child"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
