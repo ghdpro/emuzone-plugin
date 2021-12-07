@@ -10,6 +10,24 @@ Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
 */
 
+function emuzone_plugin_install() {
+	global $wpdb;
+	$emuzone_plugin_db_version = '1.0';
+	$table_name = $wpdb->prefix . 'ezvotes';
+	$charset_collate = $wpdb->get_charset_collate();
+	$sql = "CREATE TABLE $table_name (
+  	emulator_id varchar(50) NOT NULL,
+  	user_hash varchar(50) NOT NULL,
+  	rating smallint(3) NOT NULL,
+  	vote_date timestamp NOT NULL DEFAULT current_timestamp(),
+  	PRIMARY KEY  (emulator_id, user_hash)
+	) $charset_collate;";
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+	add_option( 'emuzone_plugin_db_version', $emuzone_plugin_db_version );
+}
+register_activation_hook( __FILE__, 'emuzone_plugin_install' );
+
 function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {
 		array_push(
