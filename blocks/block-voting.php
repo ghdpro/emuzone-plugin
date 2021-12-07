@@ -1,12 +1,23 @@
 <?php
 
+/* SVG should be output only once per page, should be set to TRUE once output */
+$emuzone_plugin_block_voting_svg_output = false;
+
 function emuzone_plugin_block_voting_callback( $block, $content = '', $is_preview = false, $post_id = 0 ) {
-	echo '<div>'.get_field('voting_id') . $content . date( 'U' ).'</div>';
+	echo '<div>'.get_field('vote_id') . $content .' ['. date( 'U' ).'] '. get_field( 'emulator_vote_id', $post_id ) .  '</div>';
 }
 
-function emuzone_plugin_block_voting_display( float $rating ) {
+function emuzone_plugin_block_voting_display( float $rating, string $prefix = 'Rating:' ) {
+	global $emuzone_plugin_block_voting_svg_output;
+	$awards = ["0" => 0.5, "5.7" => 1, "6.1" => 1.5, "6.5" => 2, "6.9" => 2.5, "7.3" => 3, "7.7" => 3.5, "8.1" => 4, "8.5" => 4.5, "8.9" => 5];
+	foreach ( $awards as $key => $value ) {
+		if ( $rating >= floatval($key) ) {
+			$stars = $value;
+		}
+	}
 	?>
-	<p class="star-rating align-items-center" aria-label="4.5 stars out of 5">
+	<p class="voting align-items-center" aria-label="<?php echo $stars; ?> stars out of 5">
+		<?php if ( !$emuzone_plugin_block_voting_svg_output ) { ?>
 		<svg width="0" height="0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 			<defs>
 				<linearGradient id="half" x1="0" x2="100%" y1="0" y2="0">
@@ -18,34 +29,32 @@ function emuzone_plugin_block_voting_display( float $rating ) {
 				</symbol>
 			</defs>
 		</svg>
-		Rating:
+		<?php
+				$emuzone_plugin_block_voting_svg_output = true;
+			}
+		?>
 	<?php
-	$awards = ["0" => 0.5, "5.7" => 1, "6.1" => 1.5, "6.5" => 2, "6.9" => 2.5, "7.3" => 3, "7.7" => 3.5, "8.1" => 4, "8.5" => 4.5, "8.9" => 5];
-	foreach ( $awards as $key => $value ) {
-		if ( $rating >= floatval($key) ) {
-			$stars = $value;
-		}
-	}
+	echo $prefix;
 	for ( $i = 1; $i <= 5; $i++ ) {
 		if ( $i <= $stars ) {
 			?>
-			<svg class="c-star active" width="16" height="16" viewBox="0 0 32 32">
+			<svg class="v-star active" width="16" height="16" viewBox="0 0 32 32">
 				<use xlink:href="#star"></use>
 			</svg>
 			<?php
 		} elseif ( $i <= ( $stars + 0.5 ) ) {
 			?>
-			<svg class="c-star active" width="16" height="16" viewBox="0 0 32 32">
+			<svg class="v-star active" width="16" height="16" viewBox="0 0 32 32">
 				<use xlink:href="#star" fill="url(#half)"></use>
 			</svg>
 			<?php
 		} else {
 			?>
-			<svg class="c-star" width="16" height="16" viewBox="0 0 32 32">
+			<svg class="v-star" width="16" height="16" viewBox="0 0 32 32">
 				<use xlink:href="#star"></use>
 			</svg>
 			<?php
 		}
 	}
-	echo $rating;
+	echo '<span class="v-rating">' . $rating . '</span>';
 }

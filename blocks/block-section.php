@@ -35,10 +35,17 @@ function emuzone_plugin_block_section_loop( array $emulators ) {
 		$name = strval( get_field( 'emulator_name', $emulator->ID ) );
 		if ( empty( $name ) )
 			$name = get_the_title( $emulator->ID );
-		$recommended = boolval( get_field( 'emulator_recommended', $emulator->ID ) );
+		// Is emulator recommended for this section?
+		$emulator_recommended = get_field( 'emulator_recommended', $emulator->ID );
+		$recommended = false;
+		if ( is_array( $emulator_recommended ) && in_array( get_the_ID(), $emulator_recommended ) )
+			$recommended = true;
 		// Other fields
-		$platform = strval( get_field( 'emulator_platform', $emulator->ID ) );
-		$license = strval( get_field( 'emulator_license', $emulator->ID ) );
+		$emulator_platform = get_field( 'emulator_platform', $emulator->ID );
+		$platform = '';
+		if ( !empty( $emulator_platform ) && is_array($emulator_platform) && ( count( $emulator_platform ) > 0 ) )
+			$platform = implode( ' ', $emulator_platform );
+		$license = get_field( 'emulator_license', $emulator->ID );
 		$vote_id = strval( get_field( 'emulator_vote_id', $emulator->ID ) );
 		$description = strval( get_field( 'emulator_description', $emulator->ID ) );
 		emuzone_plugin_block_section_item( $url, $name, $recommended, $platform, $license, $vote_id, $description );
@@ -52,7 +59,7 @@ function emuzone_plugin_block_section_item( string $url, string $name, bool $rec
 		<td class="link"><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $name ); ?></a><?php if ( $recommended ) echo '<i class="fa fa-check-circle-o text-success"></i>'; ?></td>
 		<td class="platform"><?php echo esc_html( $platform ); ?></td>
 		<td class="d-none d-sm-table-cell"><?php echo esc_html( $license ); ?></td>
-		<td class="d-none d-md-table-cell align-items-center"><?php emuzone_plugin_block_voting_display( 0 ); ?></td>
+		<td class="d-none d-md-table-cell align-items-center"><?php emuzone_plugin_block_voting_display( (rand(1,100)/10), '' ); ?></td>
 	</tr>
 	<tr class="description">
 		<td colspan="4"><?php echo esc_html( $description ); ?></td>
