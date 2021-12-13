@@ -4,8 +4,71 @@
 $emuzone_plugin_block_voting_svg_output = false;
 
 function emuzone_plugin_block_voting_callback( $block, $content = '', $is_preview = false, $post_id = 0 ) {
-	echo '<div>'.get_field('vote_id') . $content .' ['. date( 'U' ).'] '. get_field( 'emulator_vote_id', $post_id ) .  '</div>';
+	// Get Vote ID from block field (should be empty in most cases)
+	$vote_id = get_field('vote_id');
+	// Otherwise, get Vote ID from emulator data (on emulator pages)
+	if ( empty( $vote_id ) )
+		$vote_id = get_field( 'emulator_vote_id', $post_id );
+	// If still empty, set it to a default value (this should never happen)
+	if ( is_null( $vote_id ) )
+		$vote_id = '_invalid_';
+	echo emuzone_plugin_block_vote_form( $vote_id );
 }
+
+function emuzone_plugin_block_vote_form(string $vote_id) {
+	global $wp;
+	$redirect = home_url( add_query_arg( array( $_GET ), $wp->request . '/'), 'relative' );
+?>
+<br/><div class="row g-0 justify-content-center votebox">
+	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
+		<h2 class="votedisplay">User Rating</h2>
+		<div class="votedisplay">
+			<?php echo emuzone_plugin_block_voting_display( (rand(1,100)/10) ); ?>
+		</div>
+	</div>
+	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
+		<h2 class="vote">Vote</h2>
+		<div class="vote">
+			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="emuzone_vote_form">
+				<input type="hidden" name="action" value="emuzone_vote_form_response">
+				<input type="hidden" name="emuzone_vote_form_nonce" value="<?php echo wp_create_nonce( 'emuzone_vote_form_nonce' ); ?>" />
+				<input type="hidden" name="redirect" value="<?php echo esc_attr( $redirect );  ?>">
+				<label for="voteSelection">Rate it:</label>
+				<input type="hidden" name="emulator" value="<?php echo esc_attr( $vote_id ); ?>">
+				<select name="vote" size="1" id="voteSelection">
+					<option value="0">Select...</option>
+					<option value="1">1 (awful)</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4 (poor)</option>
+					<option value="5">5</option>
+					<option value="6">6 (average)</option>
+					<option value="7">7</option>
+					<option value="8">8 (good)</option>
+					<option value="9">9</option>
+					<option value="10">10 (excellent)</option>
+				</select>
+				<input type="submit" name="submit" value="Vote!">
+			</form>
+		</div>
+	</div>
+</div><br/>
+<?php
+}
+
+function emuzone_vote_form_response() {
+	// Verify nonce
+	if ( !isset( $_POST[ 'emuzone_vote_form_nonce' ] ) || !wp_verify_nonce( $_POST[ 'emuzone_vote_form_nonce' ], 'emuzone_vote_form_nonce' ) )
+	{
+		http_response_code( 400 );
+		die( 'Bad Request' );
+	}
+	// User hash should use wp_hash()
+	nocache_headers();
+	wp_safe_redirect($_POST['redirect']);
+	exit();
+}
+add_action( 'admin_post_nopriv_emuzone_vote_form_response', 'emuzone_vote_form_response' );
 
 function emuzone_plugin_block_voting_display( float $rating, string $prefix = 'Rating:' ) {
 	global $emuzone_plugin_block_voting_svg_output;
