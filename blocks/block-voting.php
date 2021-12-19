@@ -15,7 +15,7 @@ function emuzone_plugin_block_voting_callback( $block, $content = '', $is_previe
 	echo emuzone_plugin_block_votebox( $vote_id );
 }
 
-function emuzone_plugin_block_votebox(string $vote_id) {
+function emuzone_plugin_block_votebox( string $vote_id ) {
 	global $wp;
 	$redirect = home_url( add_query_arg( array( $_GET ), $wp->request . '/'), 'relative' );
 ?>
@@ -23,7 +23,7 @@ function emuzone_plugin_block_votebox(string $vote_id) {
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
 		<h2 class="votedisplay">User Rating</h2>
 		<div class="votedisplay">
-			<?php echo emuzone_plugin_block_voting_display( (rand(1,100)/10) ); ?>
+			<?php echo emuzone_plugin_block_voting_display( emuzone_plugin_block_voting_get_rating( $vote_id ), emuzone_plugin_block_voting_get_count( $vote_id ) ); ?>
 		</div>
 	</div>
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
@@ -75,7 +75,19 @@ function emuzone_vote_form_response() {
 add_action( 'admin_post_emuzone_vote_form_response', 'emuzone_vote_form_response' );
 add_action( 'admin_post_nopriv_emuzone_vote_form_response', 'emuzone_vote_form_response' );
 
-function emuzone_plugin_block_voting_display( float $rating, string $prefix = 'Rating:' ) {
+function emuzone_plugin_block_voting_get_rating ( string $vote_id ) {
+	global $wpdb;
+	$result = $wpdb->get_var( $wpdb->prepare( 'SELECT AVG(rating) FROM '.$wpdb->prefix.'ezvotes WHERE emulator_id="%s" AND vote_date > ( NOW() - INTERVAL 3 YEAR )', $vote_id ) );
+	return floatval( $result );
+}
+
+function emuzone_plugin_block_voting_get_count ( string $vote_id ) {
+	global $wpdb;
+	$result = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM '.$wpdb->prefix.'ezvotes WHERE emulator_id="%s" AND vote_date > ( NOW() - INTERVAL 3 YEAR )', $vote_id ) );
+	return intval( $result );
+}
+
+function emuzone_plugin_block_voting_display( float $rating, int $count = null, string $prefix = 'Rating:' ) {
 	global $emuzone_plugin_block_voting_svg_output;
 	$awards = ["0" => 0.5, "5.7" => 1, "6.1" => 1.5, "6.5" => 2, "6.9" => 2.5, "7.3" => 3, "7.7" => 3.5, "8.1" => 4, "8.5" => 4.5, "8.9" => 5];
 	foreach ( $awards as $key => $value ) {
@@ -124,5 +136,7 @@ function emuzone_plugin_block_voting_display( float $rating, string $prefix = 'R
 			<?php
 		}
 	}
-	echo '<span class="v-rating">' . $rating . '</span>';
+	echo '<span class="v-rating">' . sprintf( '%.1f', $rating ) . '</span>';
+	if ( !is_null( $count ) )
+		echo '<small class="v-count">(' . sprintf( '%d', $count ) . ' votes)</small>';
 }

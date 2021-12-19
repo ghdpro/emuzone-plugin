@@ -59,7 +59,7 @@ function emuzone_plugin_block_section_item( string $url, string $name, bool $rec
 		<td class="link"><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $name ); ?></a><?php if ( $recommended ) echo '<i class="fa fa-check-circle-o text-success"></i>'; ?></td>
 		<td class="platform"><?php echo esc_html( $platform ); ?></td>
 		<td class="d-none d-sm-table-cell"><?php echo esc_html( $license ); ?></td>
-		<td class="d-none d-md-table-cell align-items-center"><?php emuzone_plugin_block_voting_display( (rand(1,100)/10), '' ); ?></td>
+		<td class="d-none d-md-table-cell align-items-center"><?php emuzone_plugin_block_voting_display( emuzone_plugin_block_voting_get_rating( $vote_id ), null, '' ); ?></td>
 	</tr>
 	<tr class="description">
 		<td colspan="4"><?php echo esc_html( $description ); ?></td>
