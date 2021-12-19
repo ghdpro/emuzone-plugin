@@ -10,6 +10,7 @@ Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
 */
 
+const EMUZONE_CACHE_TTL = 3600;
 $legacydb = null;
 
 function emuzone_plugin_install() {
