@@ -90,3 +90,23 @@ function emuzone_plugin_widgets_init() {
 	register_widget( 'TopDownloadsWidget' );
 }
 add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
+
+function emuzone_get_ip() {
+	$result = '';
+	if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+		$result = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && !empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && preg_match_all( '#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches ) ) {
+		foreach ( $matches[0] as $ip ) {
+			// Ignore internal IPs
+			if ( !preg_match( "#^(10|172\.16|192\.168)\.#", $ip ) ) {
+				$result = $ip;
+			}
+		}
+	} elseif ( isset( $_SERVER['HTTP_FROM'] ) && ! empty( $_SERVER['HTTP_FROM'] ) ) {
+		$result = $_SERVER['HTTP_FROM'];
+	}
+	// No proxy detected
+	if ( empty( $result ) )
+		$result = $_SERVER["REMOTE_ADDR"];
+	return $result;
+}

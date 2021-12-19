@@ -12,6 +12,8 @@ function emuzone_voting_callback( $block, $content = '', $is_preview = false, $p
 	// If still empty, set it to a default value (this should never happen)
 	if ( is_null( $vote_id ) )
 		$vote_id = '_invalid_';
+	// Trim excess whitespace
+	$vote_id = trim( $vote_id );
 	echo emuzone_votebox( $vote_id );
 }
 
@@ -23,12 +25,19 @@ function emuzone_votebox( string $vote_id ) {
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
 		<h2 class="votedisplay">User Rating</h2>
 		<div class="votedisplay">
-			<?php echo emuzone_voting_display( emuzone_voting_rating( $vote_id ), emuzone_voting_count( $vote_id ), 'Rating' ); ?>
+			<?php echo emuzone_voting_display( emuzone_voting_rating( $vote_id ), emuzone_voting_count( $vote_id ), 'Rating: ' ); ?>
 		</div>
 	</div>
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
 		<h2 class="vote">Vote</h2>
 		<div class="vote">
+			<?php
+				if ( isset( $_REQUEST['voted1'] ) ) {
+					echo '<span class="text-success">Thanks for voting!</span>';
+				} elseif ( isset( $_REQUEST['voted2'] ) ) {
+					echo '<span class="text-danger">Your vote has been updated!</span>';
+				} else {
+			?>
 			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="emuzone_voting">
 				<input type="hidden" name="action" value="emuzone_voting_response">
 				<input type="hidden" name="emuzone_voting_nonce" value="<?php echo wp_create_nonce( 'emuzone_voting_nonce' ); ?>" />
@@ -50,6 +59,9 @@ function emuzone_votebox( string $vote_id ) {
 				</select>
 				<input type="submit" name="submit" value="Vote!">
 			</form>
+			<?php
+				}
+			?>
 		</div>
 	</div>
 </div><br/>
@@ -60,12 +72,40 @@ function emuzone_voting_response() {
 	// Tell browsers not to cache any response
 	nocache_headers();
 	// Verify nonce
-	if ( !isset( $_POST[ 'emuzone_voting_nonce' ] ) || !wp_verify_nonce( $_POST[ 'emuzone_voting_nonce' ], 'emuzone_voting_nonce' ) )
-	{
+	if ( !isset( $_POST['emuzone_voting_nonce'] ) || !wp_verify_nonce( $_POST['emuzone_voting_nonce'], 'emuzone_voting_nonce' ) ) {
 		http_response_code( 400 );
 		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
 	}
-	wp_safe_redirect( $_POST['redirect'] );
+	// Verify emulator
+	if ( !isset( $_POST['emulator'] ) ) {
+		http_response_code( 400 );
+		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+	}
+	// Verify redirect path
+	if ( !isset( $_POST['redirect'] ) ) {
+		http_response_code( 400 );
+		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+	}
+	$url = parse_url( $_POST['redirect'] );
+	if ( $url === false ) {
+		http_response_code( 400 );
+		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+	}
+	$path = $url['path'];
+	// Verify rating - if invalid quietly redirect to referring page (most common cause: no rating selected)
+	if ( !isset( $_POST['vote'] ) || ( intval( $_POST['vote'] ) < 1 ) || ( intval( $_POST['vote'] ) > 10 ) ) {
+		wp_safe_redirect( $path );
+		exit();
+	}
+	// Finally, if all checks passed: record vote!
+	global $wpdb;
+	$data = array();
+	$data['emulator_id'] = $_POST['emulator'];
+	$data['user_hash'] = wp_hash( emuzone_get_ip() );
+	$data['rating'] = intval( $_POST['vote'] );
+	$result = $wpdb->replace( $wpdb->prefix . 'ezvotes', $data );
+	// $result is affected rows, so ?voted1 querystring for INSERT and ?voted2 querystring for UPDATE
+	wp_safe_redirect( $path .'?voted'.intval($result) );
 	exit();
 }
 // Process vote form for all users (privileged and non-privileged)
