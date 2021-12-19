@@ -16,7 +16,7 @@ require_once( 'emuzone-plugin.php' );
 
 global $wpdb;
 global $legacydb;
-emuzone_plugin_legacy_database_connect();
+emuzone_legacydb_connect();
 
 // wpdb class won't work that well for huge datasets, so using raw MySQLi statements here on database handle
 $result = mysqli_query( $legacydb->dbh,'SELECT ez_emulator.handle,ez_votes.* FROM ez_votes LEFT JOIN ez_emulator ON (ez_votes.emulatorid = ez_emulator.id) ORDER BY ez_votes.id ASC' );

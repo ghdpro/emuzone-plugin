@@ -32,7 +32,7 @@ register_activation_hook( __FILE__, 'emuzone_plugin_install' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
 
-function emuzone_plugin_legacy_database_connect() {
+function emuzone_legacydb_connect() {
 	global $legacydb;
 	$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
 }
@@ -63,7 +63,7 @@ function emuzone_plugin_block_init() {
 		'category' => 'emuzone',
 		'icon' => 'index-card',
 		'mode' => 'edit',
-		'render_callback' => 'emuzone_plugin_block_section_callback',
+		'render_callback' => 'emuzone_section_callback',
 		'supports' => array(
 			'align' => false,
 		)
@@ -75,7 +75,7 @@ function emuzone_plugin_block_init() {
 		'category' => 'emuzone',
 		'icon' => 'star-filled',
 		'mode' => 'edit',
-		'render_callback' => 'emuzone_plugin_block_voting_callback',
+		'render_callback' => 'emuzone_voting_callback',
 		'supports' => array(
 			'align' => false,
 		)
@@ -85,9 +85,7 @@ add_action( 'acf/init', 'emuzone_plugin_block_init' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/classes/class-topdownloadswidget.php' );
 
-if ( ! function_exists( 'emuzone_plugin_widgets_init' ) ) :
-	function emuzone_plugin_widgets_init() {
-		register_widget( 'TopDownloadsWidget' );
-	}
-endif;
+function emuzone_plugin_widgets_init() {
+	register_widget( 'TopDownloadsWidget' );
+}
 add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
