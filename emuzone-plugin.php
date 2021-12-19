@@ -32,7 +32,7 @@ register_activation_hook( __FILE__, 'emuzone_plugin_install' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
 
-function emuzone_plugin_database_connect() {
+function emuzone_plugin_legacy_database_connect() {
 	global $legacydb;
 	$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
 }

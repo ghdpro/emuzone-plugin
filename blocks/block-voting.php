@@ -66,7 +66,7 @@ function emuzone_vote_form_response() {
 		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
 	}
 	global $legacydb;
-	emuzone_plugin_database_connect();
+	emuzone_plugin_legacy_database_connect();
 	// User hash should use wp_hash()
 	wp_safe_redirect( $_POST['redirect'] );
 	exit();
