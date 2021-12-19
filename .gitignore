@@ -3,3 +3,6 @@
 
 # Node
 node_modules
+
+# Legacy database config
+legacy-config.php

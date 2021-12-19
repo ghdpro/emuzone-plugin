@@ -10,6 +10,8 @@ Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
 */
 
+$legacydb = null;
+
 function emuzone_plugin_install() {
 	global $wpdb;
 	$emuzone_plugin_db_version = '1.0';
@@ -27,6 +29,13 @@ function emuzone_plugin_install() {
 	add_option( 'emuzone_plugin_db_version', $emuzone_plugin_db_version );
 }
 register_activation_hook( __FILE__, 'emuzone_plugin_install' );
+
+require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
+
+function emuzone_plugin_database_connect() {
+	global $legacydb;
+	$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
+}
 
 function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {

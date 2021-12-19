@@ -12,10 +12,10 @@ function emuzone_plugin_block_voting_callback( $block, $content = '', $is_previe
 	// If still empty, set it to a default value (this should never happen)
 	if ( is_null( $vote_id ) )
 		$vote_id = '_invalid_';
-	echo emuzone_plugin_block_vote_form( $vote_id );
+	echo emuzone_plugin_block_votebox( $vote_id );
 }
 
-function emuzone_plugin_block_vote_form(string $vote_id) {
+function emuzone_plugin_block_votebox(string $vote_id) {
 	global $wp;
 	$redirect = home_url( add_query_arg( array( $_GET ), $wp->request . '/'), 'relative' );
 ?>
@@ -57,17 +57,22 @@ function emuzone_plugin_block_vote_form(string $vote_id) {
 }
 
 function emuzone_vote_form_response() {
+	// Tell browsers not to cache any response
+	nocache_headers();
 	// Verify nonce
 	if ( !isset( $_POST[ 'emuzone_vote_form_nonce' ] ) || !wp_verify_nonce( $_POST[ 'emuzone_vote_form_nonce' ], 'emuzone_vote_form_nonce' ) )
 	{
 		http_response_code( 400 );
-		die( 'Bad Request' );
+		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
 	}
+	global $legacydb;
+	emuzone_plugin_database_connect();
 	// User hash should use wp_hash()
-	nocache_headers();
-	wp_safe_redirect($_POST['redirect']);
+	wp_safe_redirect( $_POST['redirect'] );
 	exit();
 }
+// Process vote form for all users (privileged and non-privileged)
+add_action( 'admin_post_emuzone_vote_form_response', 'emuzone_vote_form_response' );
 add_action( 'admin_post_nopriv_emuzone_vote_form_response', 'emuzone_vote_form_response' );
 
 function emuzone_plugin_block_voting_display( float $rating, string $prefix = 'Rating:' ) {
