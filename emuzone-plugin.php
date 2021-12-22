@@ -13,6 +13,11 @@ License: AGPL v3.0
 const EMUZONE_CACHE_TTL = 3600;
 $legacydb = null;
 
+/**
+ * Upon activation, create ezvotes table for keeping track for emulator votes
+ *
+ * @return void
+ */
 function emuzone_plugin_install() {
 	global $wpdb;
 	$emuzone_plugin_db_version = '1.0';
@@ -33,11 +38,24 @@ register_activation_hook( __FILE__, 'emuzone_plugin_install' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
 
+/**
+ * Utility function for connecting to the legacy database (used for downloads and converting old vote data)
+ *
+ * @return void
+ */
 function emuzone_legacydb_connect() {
 	global $legacydb;
 	$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
 }
 
+/**
+ * Add 'The Emulator Zone' block category
+ *
+ * @param $block_categories
+ * @param $editor_context
+ *
+ * @return mixed
+ */
 function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {
 		array_push(
@@ -56,6 +74,11 @@ add_filter( 'block_categories_all', 'filter_block_categories_when_post_provided'
 require_once( plugin_dir_path( __FILE__ ) . 'blocks/block-section.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'blocks/block-voting.php' );
 
+/**
+ * Initialize/register Gutenberg blocks
+ *
+ * @return void
+ */
 function emuzone_plugin_block_init() {
 	acf_register_block_type( array(
 		'name' => 'emuzone-plugin/section',
@@ -86,11 +109,21 @@ add_action( 'acf/init', 'emuzone_plugin_block_init' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/classes/class-topdownloadswidget.php' );
 
+/**
+ * Initialize/register widgets (other widgets are in the theme)
+ *
+ * @return void
+ */
 function emuzone_plugin_widgets_init() {
 	register_widget( 'TopDownloadsWidget' );
 }
 add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
 
+/**
+ * Utility function for obtaining real IP of user, even if behind a proxy (if proxy exposed real IP)
+ *
+ * @return mixed|string
+ */
 function emuzone_get_ip() {
 	$result = '';
 	if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {

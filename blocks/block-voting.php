@@ -3,6 +3,29 @@
 /* SVG should be output only once per page, should be set to TRUE once output */
 $emuzone_voting_svg_output = false;
 
+/**
+ * Filters out illegal characters from $emulator_id
+ * Only alphanumeric characters (plus dash and underscore) allowed
+ *
+ * @param $emulator_id
+ *
+ * @return string
+ */
+function filter_emulator_id( $emulator_id ) {
+	// Remove non-alphanumeric (+ dash & underscore) characters
+	return preg_replace( '/[^A-Za-z0-9-_]/', '' , $emulator_id );
+}
+
+/**
+ * Callback for voting block. Displays votebox with current rating and voting form.
+ *
+ * @param $block
+ * @param $content
+ * @param $is_preview
+ * @param $post_id
+ *
+ * @return void
+ */
 function emuzone_voting_callback( $block, $content = '', $is_preview = false, $post_id = 0 ) {
 	// Get Vote ID from block field (should be empty in most cases)
 	$vote_id = get_field('vote_id');
@@ -13,10 +36,17 @@ function emuzone_voting_callback( $block, $content = '', $is_preview = false, $p
 	if ( is_null( $vote_id ) )
 		$vote_id = '_invalid_';
 	// Trim excess whitespace
-	$vote_id = trim( $vote_id );
+	$vote_id = filter_emulator_id( trim( $vote_id ) );
 	echo emuzone_votebox( $vote_id );
 }
 
+/**
+ * Display the votebox with current rating and voting form.
+ *
+ * @param string $vote_id
+ *
+ * @return void
+ */
 function emuzone_votebox( string $vote_id ) {
 	global $wp;
 	$redirect = home_url( add_query_arg( array( $_GET ), $wp->request . '/'), 'relative' );
@@ -68,6 +98,11 @@ function emuzone_votebox( string $vote_id ) {
 <?php
 }
 
+/**
+ * Process voting form response and redirect back to referring page.
+ *
+ * @return void
+ */
 function emuzone_voting_response() {
 	// Tell browsers not to cache any response
 	nocache_headers();
@@ -78,6 +113,11 @@ function emuzone_voting_response() {
 	}
 	// Verify emulator
 	if ( !isset( $_POST['emulator'] ) ) {
+		http_response_code( 400 );
+		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+	}
+	$emulator_id = filter_emulator_id( $_POST['emulator'] );
+	if ( empty( $emulator_id ) ) {
 		http_response_code( 400 );
 		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
 	}
@@ -100,10 +140,13 @@ function emuzone_voting_response() {
 	// Finally, if all checks passed: record vote!
 	global $wpdb;
 	$data = array();
-	$data['emulator_id'] = $_POST['emulator'];
+	$data['emulator_id'] = $emulator_id;
 	$data['user_hash'] = wp_hash( emuzone_get_ip() );
 	$data['rating'] = intval( $_POST['vote'] );
 	$result = $wpdb->replace( $wpdb->prefix . 'ezvotes', $data );
+	// Clear cache
+	wp_cache_delete( 'rating_' . $emulator_id, 'emuzone_voting' );
+	wp_cache_delete( 'count_' . $emulator_id, 'emuzone_voting' );
 	// $result is affected rows, so ?voted1 querystring for INSERT and ?voted2 querystring for UPDATE
 	wp_safe_redirect( $path .'?voted'.intval($result) );
 	exit();
@@ -112,7 +155,15 @@ function emuzone_voting_response() {
 add_action( 'admin_post_emuzone_voting_response', 'emuzone_voting_response' );
 add_action( 'admin_post_nopriv_emuzone_voting_response', 'emuzone_voting_response' );
 
+/**
+ * Retrieve average rating for $vote_id
+ *
+ * @param string $vote_id
+ *
+ * @return float
+ */
 function emuzone_voting_rating ( string $vote_id ) {
+	$vote_id = filter_emulator_id( $vote_id );
 	$value = wp_cache_get( 'rating_' . $vote_id, 'emuzone_voting' );
 	if ( $value === false )
 	{
@@ -124,7 +175,15 @@ function emuzone_voting_rating ( string $vote_id ) {
 	return $value;
 }
 
+/**
+ * Retrieve vote count for $vote_id
+ *
+ * @param string $vote_id
+ *
+ * @return int
+ */
 function emuzone_voting_count ( string $vote_id ) {
+	$vote_id = filter_emulator_id( $vote_id );
 	$value = wp_cache_get( 'count_' . $vote_id, 'emuzone_voting' );
 	if ( $value === false )
 	{
@@ -136,6 +195,15 @@ function emuzone_voting_count ( string $vote_id ) {
 	return $value;
 }
 
+/**
+ * Display current rating. Used by votebox and section block.
+ *
+ * @param float $rating
+ * @param int|null $count
+ * @param string $prefix
+ *
+ * @return void
+ */
 function emuzone_voting_display( float $rating, int $count = null, string $prefix = '' ) {
 	global $emuzone_voting_svg_output;
 	$awards = ["0" => 0.5, "5.7" => 1, "6.1" => 1.5, "6.5" => 2, "6.9" => 2.5, "7.3" => 3, "7.7" => 3.5, "8.1" => 4, "8.5" => 4.5, "8.9" => 5];
