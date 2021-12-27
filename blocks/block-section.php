@@ -76,7 +76,7 @@ function emuzone_section_loop( array $emulators ) {
 		$platform = '';
 		if ( !empty( $emulator_platform ) && is_array($emulator_platform) && ( count( $emulator_platform ) > 0 ) )
 			$platform = implode( ' ', $emulator_platform );
-		$license = get_field( 'emulator_license', $emulators[$key]->ID );
+		$license = strval ( get_field( 'emulator_license', $emulators[$key]->ID ) );
 		$description = strval( get_field( 'emulator_description', $emulators[$key]->ID ) );
 		emuzone_section_item( $url, $name, $recommended, $platform, $license, $rating, $description );
 	}

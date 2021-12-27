@@ -32,11 +32,11 @@ function emuzone_voting_callback( $block, $content = '', $is_preview = false, $p
 	// Otherwise, get Vote ID from emulator data (on emulator pages)
 	if ( empty( $vote_id ) )
 		$vote_id = get_field( 'emulator_vote_id', $post_id );
-	// If still empty, set it to a default value (this should never happen)
-	if ( is_null( $vote_id ) )
-		$vote_id = '_invalid_';
 	// Trim excess whitespace
-	$vote_id = filter_emulator_id( trim( $vote_id ) );
+	$vote_id = trim( filter_emulator_id( strval( $vote_id ) ) );
+	// If empty, set it to a default value (this should never happen)
+	if ( empty( $vote_id ) )
+		$vote_id = '_invalid_';
 	echo emuzone_votebox( $vote_id );
 }
 
@@ -164,6 +164,8 @@ add_action( 'admin_post_nopriv_emuzone_voting_response', 'emuzone_voting_respons
  */
 function emuzone_voting_rating ( string $vote_id ) {
 	$vote_id = filter_emulator_id( $vote_id );
+	if ( empty( $vote_id ) )
+		return 0;
 	$value = wp_cache_get( 'rating_' . $vote_id, 'emuzone_voting' );
 	if ( $value === false )
 	{
@@ -184,6 +186,8 @@ function emuzone_voting_rating ( string $vote_id ) {
  */
 function emuzone_voting_count ( string $vote_id ) {
 	$vote_id = filter_emulator_id( $vote_id );
+	if ( empty( $vote_id ) )
+		return 0;
 	$value = wp_cache_get( 'count_' . $vote_id, 'emuzone_voting' );
 	if ( $value === false )
 	{
