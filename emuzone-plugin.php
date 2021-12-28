@@ -73,6 +73,7 @@ add_filter( 'block_categories_all', 'filter_block_categories_when_post_provided'
 
 require_once( plugin_dir_path( __FILE__ ) . 'blocks/block-section.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'blocks/block-voting.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'blocks/block-download.php' );
 
 /**
  * Initialize/register Gutenberg blocks
@@ -100,6 +101,18 @@ function emuzone_plugin_block_init() {
 		'icon' => 'star-filled',
 		'mode' => 'edit',
 		'render_callback' => 'emuzone_voting_callback',
+		'supports' => array(
+			'align' => false,
+		)
+	) );
+	acf_register_block_type( array(
+		'name' => 'emuzone-plugin/download',
+		'title' => 'EZ Download',
+		'description' => 'The Emulator Zone file downloads',
+		'category' => 'emuzone',
+		'icon' => 'download',
+		'mode' => 'edit',
+		'render_callback' => 'emuzone_download_callback',
 		'supports' => array(
 			'align' => false,
 		)
