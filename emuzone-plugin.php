@@ -45,7 +45,10 @@ require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
  */
 function emuzone_legacydb_connect() {
 	global $legacydb;
-	$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
+	if ( is_null( $legacydb ) or !( $legacydb instanceof wpdb ) )
+		$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
+	else
+		$legacydb->check_connection();
 }
 
 /**
