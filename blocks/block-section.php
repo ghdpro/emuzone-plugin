@@ -104,7 +104,7 @@ function emuzone_section_item( string $url, string $name, bool $recommended = fa
 		<td class="d-none d-lg-table-cell align-items-center"><?php emuzone_voting_display( $rating ); ?></td>
 	</tr>
 	<tr class="description">
-		<td colspan="4"><?php echo esc_html( $description ); ?>&nbsp;</td>
+		<td colspan="4"><?php echo esc_html( $description ); ?></td>
 	</tr>
 	<?php
 }
