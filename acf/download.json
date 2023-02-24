@@ -1,0 +1,70 @@
+[
+    {
+        "key": "group_61cac6cc2bc03",
+        "title": "Download",
+        "fields": [
+            {
+                "key": "field_61cac6dd99682",
+                "label": "Downloads",
+                "name": "downloads",
+                "aria-label": "",
+                "type": "repeater",
+                "instructions": "Each field should include a file ID (alphanumeric, dash, underscore) or \"manual\" download entry separated by a semicolon (;). Field order for manual entry: #1 URL; #2 Name; #3 Version; #4 Description; #5 Platform; #6 License; #7 Date; #8 Size; #9 Homepage URL. Leave unknown\/not relevant parts empty.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "collapsed": "",
+                "min": 1,
+                "max": 0,
+                "layout": "table",
+                "button_label": "Add Row",
+                "sub_fields": [
+                    {
+                        "key": "field_61cac6e699683",
+                        "label": "",
+                        "name": "file_id",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "maxlength": "",
+                        "parent_repeater": "field_61cac6dd99682"
+                    }
+                ],
+                "rows_per_page": 20
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "block",
+                    "operator": "==",
+                    "value": "acf\/emuzone-plugin-download"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

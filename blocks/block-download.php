@@ -102,7 +102,9 @@ function emuzone_download_loop( array $downloads ) {
 					$platformtypes[ $data['platform'] ],
 					$licensetypes[ $data['license'] ],
 					date( 'M j, Y', $data['dateline'] ),
-					strval( ( floor( @filesize( LEGACY_FILES_PATH . $data['pathinfo']) / 1024 ) + 1 ) ),
+					// Get real filesize with: @filesize( LEGACY_FILES_PATH . $data['pathinfo'] )
+					// But it's faster to use database value
+					strval( ( floor( intval( $data['size'] ) / 1024 ) + 1 ) ),
 					strval( $data['homepage'] )
 			);
 		}
