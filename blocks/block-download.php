@@ -56,6 +56,30 @@ function emuzone_download_template( array $downloads ) {
 }
 
 /**
+ * Returns file size in human readable way
+ *
+ * <1 Kb: measure in b (bytes)
+ * <1 Mb: measure in Kb
+ * <10Mb: measure in Mb (with 1 decimal)
+ * >10Mb: measure in Mb (without decimals)
+ *
+ * @param int $size
+ *
+ * @return array
+ */
+function filesize_human( int $size ): array {
+	if ( $size < 1024 ) {
+		return array ( number_format( $size, 0 ), 'b' );
+	} elseif ( $size < 1048576 ) {
+		return array ( number_format( $size / 1024, 0 ), 'Kb' );
+	} elseif ($size < 10485760) {
+		return array ( number_format( $size / 1048576, 1 ), 'Mb' );
+	} else {
+		return array ( number_format( $size / 1048576, 0 ), 'Mb' );
+	}
+}
+
+/**
  * Displays the list of downloads
  *
  * @param array $downloads
@@ -80,9 +104,15 @@ function emuzone_download_loop( array $downloads ) {
 			$license = ( isset( $parts[5] ) ? trim( strval ( $parts[5] ) ) : '' );
 			$data = ( isset( $parts[6] ) ? trim( strval ( $parts[6] ) ) : '' );
 			$size = ( isset( $parts[7] ) ? trim( strval ( $parts[7] ) ) : '' );
+			if ( intval( $size ) > 0 ) {
+				$size_human = filesize_human( $size );
+			} else {
+				// File size isn't a number, so fake the output of the filesize_human() function
+				$size_human = array( $size, '' );
+			}
 			$homepage = ( isset( $parts[8] ) ? trim( strval ( $parts[8] ) ) : '' );
 
-			emuzone_download_item( '_blank', $url, $name, $version, $description, $platform, $license, $data, $size, $homepage );
+			emuzone_download_item( '_blank', $url, $name, $version, $description, $platform, $license, $data, $size_human, $homepage );
 		} else {
 			// Get data from legacy database
 			$data = $legacydb->get_row( $legacydb->prepare( 'SELECT * FROM ez_files WHERE handle="%s"' , $file ), ARRAY_A );
@@ -104,7 +134,7 @@ function emuzone_download_loop( array $downloads ) {
 					date( 'M j, Y', $data['dateline'] ),
 					// Get real filesize with: @filesize( LEGACY_FILES_PATH . $data['pathinfo'] )
 					// But it's faster to use database value
-					strval( ( floor( intval( $data['size'] ) / 1024 ) + 1 ) ),
+					filesize_human( $data['size'] ),
 					strval( $data['homepage'] )
 			);
 		}
@@ -127,7 +157,7 @@ function emuzone_download_loop( array $downloads ) {
  *
  * @return void
  */
-function emuzone_download_item( string $target, string $url, string $name, string $version, string $description, string $platform, string $license, string $date, string $size, string $homepage ) {
+function emuzone_download_item( string $target, string $url, string $name, string $version, string $description, string $platform, string $license, string $date, array $size, string $homepage ) {
 	?>
 	<tr>
 		<td data-th="File">
@@ -137,7 +167,7 @@ function emuzone_download_item( string $target, string $url, string $name, strin
 		<td data-th="Platform"> <?php if ( !empty( $platform ) ) echo esc_html( $platform ); else echo '-'; ?> </td>
 		<td data-th="License"> <?php if ( !empty( $license ) ) echo esc_html( $license ); else echo '-'; ?> </td>
 		<td data-th="Date"> <?php if ( !empty( $date ) ) echo esc_html( $date ); else echo '-'; ?> </td>
-		<td data-th="Size"> <?php if ( !empty( $size ) ) echo '<b>' . esc_html( $size ) . '</b> Kb.'; else echo '-'; ?> </td>
+		<td data-th="Size"> <?php if ( !empty( $size ) ) echo '<b>' . esc_html( $size[0] ) . '</b> ' . esc_html( $size[1] ); else echo '-'; ?> </td>
 		<td data-th="Site">
 			<?php
 				if ( !empty( $homepage ) )
