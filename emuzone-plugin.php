@@ -136,6 +136,30 @@ function emuzone_plugin_widgets_init() {
 add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
 
 /**
+ * Register The Emulator Zone dashboard widget
+ *
+ * @return void
+ */
+function emuzone_register_dashboard_widget() {
+	add_meta_box( 'emuzone_dashboard', 'The Emulator Zone', 'emuzone_dashboard_widget', 'dashboard', 'normal', 'high' );
+}
+add_action( 'wp_dashboard_setup', 'emuzone_register_dashboard_widget' );
+
+/**
+ * Display The Emulator Zone dashboard widget
+ *
+ * @return void
+ */
+function emuzone_dashboard_widget( $post, $callback_args ) {
+	$widget = plugin_dir_path( __FILE__ ) . 'private/dashboard.html';
+	if ( file_exists( $widget ) ) {
+		include( $widget );
+	} else {
+		echo '<p class="error"><b>Error:</b> dashboard widget file missing.</p>';
+	}
+}
+
+/**
  * Utility function for obtaining real IP of user, even if behind a proxy (if proxy exposed real IP)
  *
  * @return mixed|string

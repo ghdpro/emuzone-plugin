@@ -4,5 +4,8 @@
 # Node
 node_modules
 
+# Private templates
+private
+
 # Legacy database config
 legacy-config.php
