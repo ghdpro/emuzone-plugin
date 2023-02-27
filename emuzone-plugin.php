@@ -61,13 +61,10 @@ function emuzone_legacydb_connect() {
  */
 function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {
-		array_push(
-			$block_categories,
-			array(
-				'slug'  => 'emuzone',
-				'title' => __( 'The Emulator Zone', 'emuzone-plugin' ),
-				'icon'  => null,
-			)
+		$block_categories[] = array(
+			'slug'  => 'emuzone',
+			'title' => __( 'The Emulator Zone', 'emuzone-plugin' ),
+			'icon'  => null,
 		);
 	}
 	return $block_categories;
