@@ -22,18 +22,17 @@ class TopDownloadsWidget extends WP_Widget {
 	 * @return string
 	 */
 	protected function render(): string {
-		global $legacydb;
+		global $wpdb, $legacydb;
 		emuzone_legacydb_connect();
 		$output = '';
 		$result = $legacydb->get_results( 'SELECT name, version, handle FROM ez_files ORDER BY downloads DESC LIMIT 0,10' );
 		$output .= '<ul>' . "\n";
 		foreach ( $result as $row ) {
 			$link = null;
-			$query = new WP_Query( array( 's' => $row->handle ) );
-			if ( $query->have_posts() ) {
+			$query = $wpdb->get_row( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . " WHERE post_type = 'page' AND post_content LIKE %s", '%'. $wpdb->esc_like('file_id":"' . $row->handle . '"') . '%') );
+			if ( !is_null( $query ) ) {
 				// Found a page with handle
-				$query->the_post();
-				$link = get_the_permalink();
+				$link = get_permalink( $query->ID );
 			}
 			$name = $row->name;
 			if ( !empty( $row->version ) ) {
@@ -46,7 +45,6 @@ class TopDownloadsWidget extends WP_Widget {
 			}
 		}
 		$output .= '</ul>' . "\n";
-		wp_reset_postdata();
 		return $output;
 	}
 
@@ -58,6 +56,11 @@ class TopDownloadsWidget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		echo '<h2 class="widget-title">Top Downloads</h2>';
-		echo $this->render();
+		$result = wp_cache_get( 'ez_top_downloads' );
+		if ( $result === false ) {
+			$result = $this->render();
+			wp_cache_set( 'ez_top_downloads', $result, '', 300 );
+		}
+		echo $result;
 	}
 }
