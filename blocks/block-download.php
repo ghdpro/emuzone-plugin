@@ -167,7 +167,7 @@ function emuzone_download_item( string $target, string $url, string $name, strin
 		<td data-th="Platform"> <?php if ( !empty( $platform ) ) echo esc_html( $platform ); else echo '-'; ?> </td>
 		<td data-th="License"> <?php if ( !empty( $license ) ) echo esc_html( $license ); else echo '-'; ?> </td>
 		<td data-th="Date"> <?php if ( !empty( $date ) ) echo esc_html( $date ); else echo '-'; ?> </td>
-		<td data-th="Size"> <?php if ( !empty( $size ) ) echo '<b>' . esc_html( $size[0] ) . '</b> ' . esc_html( $size[1] ); else echo '-'; ?> </td>
+		<td data-th="Size"> <?php if ( !empty( $size[0] ) ) echo '<b>' . esc_html( $size[0] ) . '</b> ' . esc_html( $size[1] ); else echo '-'; ?> </td>
 		<td data-th="Site">
 			<?php
 				if ( !empty( $homepage ) )
