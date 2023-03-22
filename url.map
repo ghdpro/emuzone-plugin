@@ -1,0 +1,263 @@
+/doc.php/3do/
+/doc.php/3do/3doplay.html
+/doc.php/3do/4do.html
+/doc.php/3do/freedo.html
+/doc.php/3ds/ /3ds/;
+/doc.php/3ds/citra.html /3ds/citra/;
+/doc.php/a2600/ /atari/;
+/doc.php/a2600/stella.html
+/doc.php/a2600/z26.html /atari/;
+/doc.php/amiga/
+/doc.php/amiga/fs-uae.html
+/doc.php/amiga/winfellow.html
+/doc.php/amiga/winuae.html
+/doc.php/arcade/ /arcade/;
+/doc.php/arcade/calice.html
+/doc.php/arcade/daphne.html
+/doc.php/arcade/finalburnalpha.html
+/doc.php/arcade/kawaks.html
+/doc.php/arcade/mame.html /arcade/mame/;
+/doc.php/arcade/nebula.html
+/doc.php/arcade/raine.html
+/doc.php/arcade/vivanonno.html
+/doc.php/arcade/zinc.html
+/doc.php/articles/
+/doc.php/articles/article-zsnesbutters.html
+/doc.php/articles/ax2002license.html
+/doc.php/bios.html
+/doc.php/computer/
+/doc.php/computer/ccs64.html
+/doc.php/computer/cpce.html
+/doc.php/computer/dosbox-win.html
+/doc.php/computer/hoxs64.html
+/doc.php/computer/kekoproject2.html
+/doc.php/computer/minivmac.html
+/doc.php/computer/pearpc.html
+/doc.php/computer/scummvm.html
+/doc.php/computer/vice.html
+/doc.php/computer/yape.html
+/doc.php/contact.html
+/doc.php/dreamcast/
+/doc.php/dreamcast/chankast.html
+/doc.php/dreamcast/demul.html
+/doc.php/dreamcast/dreamemu.html
+/doc.php/dreamcast/flycast.html
+/doc.php/dreamcast/icarus.html
+/doc.php/dreamcast/nulldc.html
+/doc.php/dreamcast/redream.html
+/doc.php/dreamcast/reicast.html
+/doc.php/emulatorfrontends.html
+/doc.php/faq.html /help-faq/;
+/doc.php/gameboy/
+/doc.php/gameboy/basicboy.html
+/doc.php/gameboy/bgb.html
+/doc.php/gameboy/dreamgbc.html
+/doc.php/gameboy/gest.html
+/doc.php/gameboy/gnuboy.html
+/doc.php/gameboy/kigb.html
+/doc.php/gameboy/playguy.html
+/doc.php/gameboy/tgbdual.html
+/doc.php/gameboy/zboy.html
+/doc.php/gamecube/ /gamecube-wii-wii-u/;
+/doc.php/gamecube/dolphin.html /gamecube-wii-wii-u/dolphin/;
+/doc.php/gamecube/dolwin.html
+/doc.php/gamecube/gcemu.html
+/doc.php/gamecube/gcube.html
+/doc.php/gamecube/supergcube.html
+/doc.php/gamecube/whinecube.html
+/doc.php/gba/ /gba/;
+/doc.php/gba/ba.html
+/doc.php/gba/batgba.html
+/doc.php/gba/dreamgba.html
+/doc.php/gba/mgba.html
+/doc.php/gba/nocashgba.html
+/doc.php/gba/rascalboy.html
+/doc.php/gba/vboyadvance.html /gba/vboyadvance/;
+/doc.php/genesis/
+/doc.php/genesis/ages.html
+/doc.php/genesis/dgen.html
+/doc.php/genesis/fusion.html
+/doc.php/genesis/gens.html
+/doc.php/genesis/gens32.html
+/doc.php/genesis/gens_plus.html
+/doc.php/genesis/hazemd.html
+/doc.php/genesis/retrodrive.html
+/doc.php/help/ /help-faq/;
+/doc.php/help/commondefs.html
+/doc.php/help/compressedfiles.html
+/doc.php/jaguar/ /atari/;
+/doc.php/jaguar/projecttempest.html /atari/;
+/doc.php/jaguar/virtualjaguar.html
+/doc.php/linkimages.html
+/doc.php/links.html
+/doc.php/mac/
+/doc.php/misc/
+/doc.php/misc/atari_plusplus.html
+/doc.php/misc/bizhawk.html /multi/bizhawk/;
+/doc.php/misc/geepee32.html
+/doc.php/misc/mednafen.html /multi/mednafen/;
+/doc.php/misc/mess.html
+/doc.php/misc/neopop.html
+/doc.php/misc/nostalgia.html
+/doc.php/misc/prosystem.html
+/doc.php/misc/retroarch.html /multi/retroarch/;
+/doc.php/misc/retrocopy.html
+/doc.php/misc/saint.html
+/doc.php/misc/winarcadia.html
+/doc.php/mobile/
+/doc.php/mobile/mobile-palmos.html
+/doc.php/mobile/mobile-ppc.html
+/doc.php/msx/
+/doc.php/msx/bluemsx.html
+/doc.php/msx/fmsx.html
+/doc.php/msx/nlmsx.html
+/doc.php/msx/opensmx.html
+/doc.php/msx/redmsx.html
+/doc.php/msx/rumsx.html
+/doc.php/n64/
+/doc.php/n64/1964.html
+/doc.php/n64/apollo.html
+/doc.php/n64/corn.html
+/doc.php/n64/daedalus.html
+/doc.php/n64/mupen64.html
+/doc.php/n64/mupen64plus.html
+/doc.php/n64/mupen64plusplus.html
+/doc.php/n64/n64plugins.html
+/doc.php/n64/nemu64.html
+/doc.php/n64/project64.html
+/doc.php/n64/suprahle.html
+/doc.php/n64/tr64.html
+/doc.php/n64/trwin.html
+/doc.php/n64/ultrahle.html
+/doc.php/n64/ultrahle2064.html
+/doc.php/nds/
+/doc.php/nds/desmume.html
+/doc.php/nds/dsemu.html
+/doc.php/nds/dualis.html
+/doc.php/nds/duos.html
+/doc.php/nds/ideas.html
+/doc.php/nds/neonds.html
+/doc.php/nes/
+/doc.php/nes/80five.html
+/doc.php/nes/fakenes.html
+/doc.php/nes/fceux.html
+/doc.php/nes/fwnes.html
+/doc.php/nes/halfnes.html
+/doc.php/nes/jnes.html
+/doc.php/nes/mariones.html
+/doc.php/nes/mesen.html
+/doc.php/nes/mynes.html
+/doc.php/nes/nemulator.html
+/doc.php/nes/nesten.html
+/doc.php/nes/nesterj.html
+/doc.php/nes/nesticle.html
+/doc.php/nes/nestopia.html
+/doc.php/nes/nintendulator.html
+/doc.php/nes/olafnes.html
+/doc.php/nes/punes.html
+/doc.php/nes/rocknes.html
+/doc.php/nes/ubernes.html
+/doc.php/nes/virtuanes.html
+/doc.php/ngpc/
+/doc.php/ngpc/koyote.html
+/doc.php/nsw/ /switch/;
+/doc.php/nsw/ryujinx.html /switch/ryujinx/;
+/doc.php/nsw/yuzu.html /switch/yuzu/;
+/doc.php/patches.html
+/doc.php/pcengine/
+/doc.php/pcengine/hu6280.html
+/doc.php/pcengine/hugo.html
+/doc.php/pcengine/magicengine.html
+/doc.php/pcengine/ootake.html
+/doc.php/pcengine/turbo-engine.html
+/doc.php/pcengine/xpce.html
+/doc.php/privacy.html
+/doc.php/ps2/
+/doc.php/ps2/neutrinosx2.html
+/doc.php/ps2/pcsx2.html
+/doc.php/ps2/play-ps2.html
+/doc.php/ps2/ps2emu.html
+/doc.php/ps2/ps2plugins.html
+/doc.php/playstation3/
+/doc.php/playstation3/rpcs3.html
+/doc.php/ps3/
+/doc.php/ps3/rpcs3.html
+/doc.php/psp/
+/doc.php/psp/forthepsp.html
+/doc.php/psp/jpcsp.html
+/doc.php/psp/pcsp.html
+/doc.php/psp/potemkin.html
+/doc.php/psp/ppsspp.html
+/doc.php/psp/pspe.html
+/doc.php/psx/ /psx/;
+/doc.php/psx/andripsx.html
+/doc.php/psx/bleem.html
+/doc.php/psx/epsxe.html /psx/epsxe/;
+/doc.php/psx/pcsx-reloaded.html
+/doc.php/psx/pcsx.html
+/doc.php/psx/psxeven.html
+/doc.php/psx/psxplugins-tools.html
+/doc.php/psx/psx_em.html
+/doc.php/psx/ssspsx.html
+/doc.php/roms.html
+/doc.php/rss.html
+/doc.php/saturn/
+/doc.php/saturn/satourne.html
+/doc.php/saturn/saturnin.html
+/doc.php/saturn/ssf.html
+/doc.php/saturn/yabause.html
+/doc.php/saves.html
+/doc.php/search.html /;
+/doc.php/sitemap.html /;
+/doc.php/sms/
+/doc.php/sms/freezesms.html
+/doc.php/sms/meka.html
+/doc.php/sms/smsplus.html
+/doc.php/snes/ /snes/;
+/doc.php/snes/ares.html
+/doc.php/snes/bsnes.html
+/doc.php/snes/higan.html
+/doc.php/snes/sneese.html
+/doc.php/snes/snem.html
+/doc.php/snes/snes9x-ex.html
+/doc.php/snes/snes9x.html /snes/snex9x/;
+/doc.php/snes/zsnes.html /history/zsnes/;
+/doc.php/testpage.html
+/doc.php/utilities/ /utilities/;
+/doc.php/utilities/utils2.html /utilities/;
+/doc.php/virtualboy/
+/doc.php/virtualboy/reality_boy.html
+/doc.php/virtualboy/red_dragon.html
+/doc.php/virtualboy/vbjin.html
+/doc.php/virtualboy/virtual-e.html
+/doc.php/wii/ /gamecube-wii-wii-u/;
+/doc.php/wiiu/ /gamecube-wii-wii-u/;
+/doc.php/wiiu/cemu.html /gamecube-wii-wii-u/cemu/;
+/doc.php/wonderswan/
+/doc.php/wonderswan/cygne.html
+/doc.php/wonderswan/oswan.html
+/doc.php/xbox/
+/doc.php/xbox/cxbx.html
+/doc.php/xbox/dxbx.html
+/doc.php/xbox/onthebox.html
+/doc.php/xbox/xeon.html
+/doc.php/xbox360/
+/doc.php/xbox360/xenia.html
+/3ds/citra /3ds/citra/;
+/arcade/mame /arcade/mame/;
+/gba/mgba
+/misc/bizhawk /multi/bizhawk/;
+/misc/retroarch /multi/retroarch/;
+/nes/mesen
+/nes/mynes
+/nes/punes
+/ps3/rpcs3
+/ps3/
+/snes/bsnes
+/snes/higan
+/snes/snes9x-ex
+/snes/snes9x /snes/snex9x/;
+/snes/zsnes /history/zsnes/;
+/wiiu/cemu /gamecube-wii-wii-u/cemu/;
+/wiiu/ /gamecube-wii-wii-u/;
+/rss_news.php /feed/;
