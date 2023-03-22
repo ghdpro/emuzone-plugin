@@ -5,7 +5,7 @@
 /doc.php/3ds/ /3ds/;
 /doc.php/3ds/citra.html /3ds/citra/;
 /doc.php/a2600/ /atari/;
-/doc.php/a2600/stella.html
+/doc.php/a2600/stella.html /atari/stella/;
 /doc.php/a2600/z26.html /atari/;
 /doc.php/amiga/
 /doc.php/amiga/fs-uae.html
@@ -25,7 +25,7 @@
 /doc.php/articles/article-zsnesbutters.html
 /doc.php/articles/ax2002license.html
 /doc.php/bios.html
-/doc.php/computer/
+/doc.php/computer/ /computer/;
 /doc.php/computer/ccs64.html
 /doc.php/computer/cpce.html
 /doc.php/computer/dosbox-win.html
@@ -87,7 +87,7 @@
 /doc.php/help/compressedfiles.html
 /doc.php/jaguar/ /atari/;
 /doc.php/jaguar/projecttempest.html /atari/;
-/doc.php/jaguar/virtualjaguar.html
+/doc.php/jaguar/virtualjaguar.html /atari/virtualjaguar/;
 /doc.php/linkimages.html
 /doc.php/links.html
 /doc.php/mac/
@@ -137,27 +137,27 @@
 /doc.php/nds/duos.html
 /doc.php/nds/ideas.html
 /doc.php/nds/neonds.html
-/doc.php/nes/
-/doc.php/nes/80five.html
-/doc.php/nes/fakenes.html
-/doc.php/nes/fceux.html
-/doc.php/nes/fwnes.html
-/doc.php/nes/halfnes.html
-/doc.php/nes/jnes.html
-/doc.php/nes/mariones.html
-/doc.php/nes/mesen.html
-/doc.php/nes/mynes.html
-/doc.php/nes/nemulator.html
-/doc.php/nes/nesten.html
-/doc.php/nes/nesterj.html
-/doc.php/nes/nesticle.html
-/doc.php/nes/nestopia.html
-/doc.php/nes/nintendulator.html
-/doc.php/nes/olafnes.html
-/doc.php/nes/punes.html
-/doc.php/nes/rocknes.html
-/doc.php/nes/ubernes.html
-/doc.php/nes/virtuanes.html
+/doc.php/nes/ /nes/;
+/doc.php/nes/80five.html /nes/;
+/doc.php/nes/fakenes.html /nes/;
+/doc.php/nes/fceux.html /nes/fceux/;
+/doc.php/nes/fwnes.html /nes/;
+/doc.php/nes/halfnes.html /nes/;
+/doc.php/nes/jnes.html /nes/;
+/doc.php/nes/mariones.html /nes/;
+/doc.php/nes/mesen.html /nes/mesen/;
+/doc.php/nes/mynes.html /nes/;
+/doc.php/nes/nemulator.html /nes/;
+/doc.php/nes/nesten.html /nes/;
+/doc.php/nes/nesterj.html /nes/;
+/doc.php/nes/nesticle.html /nes/;
+/doc.php/nes/nestopia.html /nes/nestopia/;
+/doc.php/nes/nintendulator.html /nes/nintendulator/;
+/doc.php/nes/olafnes.html /nes/;
+/doc.php/nes/punes.html /nes/punes/;
+/doc.php/nes/rocknes.html /nes/rocknes/;
+/doc.php/nes/ubernes.html /nes/;
+/doc.php/nes/virtuanes.html /nes/;
 /doc.php/ngpc/
 /doc.php/ngpc/koyote.html
 /doc.php/nsw/ /switch/;
@@ -214,15 +214,14 @@
 /doc.php/sms/meka.html
 /doc.php/sms/smsplus.html
 /doc.php/snes/ /snes/;
-/doc.php/snes/ares.html
-/doc.php/snes/bsnes.html
-/doc.php/snes/higan.html
-/doc.php/snes/sneese.html
-/doc.php/snes/snem.html
-/doc.php/snes/snes9x-ex.html
+/doc.php/snes/ares.html /snes/ares/;
+/doc.php/snes/bsnes.html /snes/bsnes/;
+/doc.php/snes/higan.html /snes/bsnes/;
+/doc.php/snes/sneese.html /snes/;
+/doc.php/snes/snem.html /snes/;
+/doc.php/snes/snes9x-ex.html /snes/snex9x/;
 /doc.php/snes/snes9x.html /snes/snex9x/;
 /doc.php/snes/zsnes.html /history/zsnes/;
-/doc.php/testpage.html
 /doc.php/utilities/ /utilities/;
 /doc.php/utilities/utils2.html /utilities/;
 /doc.php/virtualboy/
@@ -248,14 +247,14 @@
 /gba/mgba
 /misc/bizhawk /multi/bizhawk/;
 /misc/retroarch /multi/retroarch/;
-/nes/mesen
-/nes/mynes
-/nes/punes
+/nes/mesen /nes/mesen/;
+/nes/mynes /nes/;
+/nes/punes /nes/punes/;
 /ps3/rpcs3
 /ps3/
-/snes/bsnes
-/snes/higan
-/snes/snes9x-ex
+/snes/bsnes /snes/bsnes/;
+/snes/higan /snes/bsnes/;
+/snes/snes9x-ex /snes/snex9x/;
 /snes/snes9x /snes/snex9x/;
 /snes/zsnes /history/zsnes/;
 /wiiu/cemu /gamecube-wii-wii-u/cemu/;
