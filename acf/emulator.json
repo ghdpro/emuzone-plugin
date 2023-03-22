@@ -65,6 +65,8 @@
                     "[icon name=android prefix=fab] Android": "[icon name=android prefix=fab] Android",
                     "[icon name=app-store-ios prefix=fab] iOS": "[icon name=app-store-ios prefix=fab] iOS",
                     "[icon name=box-open] iOS (jailbreak)": "[icon name=box-open] iOS (jailbreak)",
+                    "[icon name=globe] Online": "[icon name=globe] Online",
+                    "[icon name=java prefix=fab] Java": "[icon name=java prefix=fab] Java",
                     "[icon name=terminal] DOS": "[icon name=terminal] DOS"
                 },
                 "default_value": [],
