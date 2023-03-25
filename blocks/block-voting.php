@@ -94,7 +94,7 @@ function emuzone_votebox( string $vote_id ) {
 			?>
 		</div>
 	</div>
-</div><br/>
+</div>
 <?php
 }
 
