@@ -51,7 +51,7 @@ function emuzone_votebox( string $vote_id ) {
 	global $wp;
 	$redirect = home_url( add_query_arg( array( $_GET ), $wp->request . '/'), 'relative' );
 ?>
-<br/><div class="row g-0 justify-content-center votebox">
+<div class="row g-0 justify-content-center votebox">
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
 		<h2 class="votedisplay">User Rating</h2>
 		<div class="votedisplay">
