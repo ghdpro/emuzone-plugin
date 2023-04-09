@@ -66,12 +66,12 @@
 /doc.php/gamecube/supergcube.html
 /doc.php/gamecube/whinecube.html
 /doc.php/gba/ /gba/;
-/doc.php/gba/ba.html
-/doc.php/gba/batgba.html
-/doc.php/gba/dreamgba.html
-/doc.php/gba/mgba.html
-/doc.php/gba/nocashgba.html
-/doc.php/gba/rascalboy.html
+/doc.php/gba/ba.html /gba/;
+/doc.php/gba/batgba.html /gba/;
+/doc.php/gba/dreamgba.html /gba/;
+/doc.php/gba/mgba.html /gba/mgba/;
+/doc.php/gba/nocashgba.html /gba/nocashgba/;
+/doc.php/gba/rascalboy.html /gba/;
 /doc.php/gba/vboyadvance.html /gba/vboyadvance/;
 /doc.php/genesis/
 /doc.php/genesis/ages.html
@@ -114,22 +114,22 @@
 /doc.php/msx/opensmx.html
 /doc.php/msx/redmsx.html
 /doc.php/msx/rumsx.html
-/doc.php/n64/
-/doc.php/n64/1964.html
-/doc.php/n64/apollo.html
-/doc.php/n64/corn.html
-/doc.php/n64/daedalus.html
-/doc.php/n64/mupen64.html
-/doc.php/n64/mupen64plus.html
-/doc.php/n64/mupen64plusplus.html
-/doc.php/n64/n64plugins.html
-/doc.php/n64/nemu64.html
-/doc.php/n64/project64.html
-/doc.php/n64/suprahle.html
-/doc.php/n64/tr64.html
-/doc.php/n64/trwin.html
-/doc.php/n64/ultrahle.html
-/doc.php/n64/ultrahle2064.html
+/doc.php/n64/ /n64/;
+/doc.php/n64/1964.html /history/1964emu/;
+/doc.php/n64/apollo.html /n64/;
+/doc.php/n64/corn.html /n64/;
+/doc.php/n64/daedalus.html /n64/;
+/doc.php/n64/mupen64.html /n64/mupen64plus/;
+/doc.php/n64/mupen64plus.html /n64/mupen64plus/;
+/doc.php/n64/mupen64plusplus.html /n64/mupen64plus/;
+/doc.php/n64/n64plugins.html /n64/;
+/doc.php/n64/nemu64.html /n64/;
+/doc.php/n64/project64.html /n64/project64/;
+/doc.php/n64/suprahle.html /n64/;
+/doc.php/n64/tr64.html /n64/;
+/doc.php/n64/trwin.html /n64/;
+/doc.php/n64/ultrahle.html /history/ultrahle/;
+/doc.php/n64/ultrahle2064.html /n64/;
 /doc.php/nds/
 /doc.php/nds/desmume.html
 /doc.php/nds/dsemu.html
@@ -244,7 +244,7 @@
 /doc.php/xbox360/xenia.html
 /3ds/citra /3ds/citra/;
 /arcade/mame /arcade/mame/;
-/gba/mgba
+/gba/mgba /gba/mgba/;
 /misc/bizhawk /multi/bizhawk/;
 /misc/retroarch /multi/retroarch/;
 /nes/mesen /nes/mesen/;
