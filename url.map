@@ -48,16 +48,16 @@
 /doc.php/dreamcast/reicast.html
 /doc.php/emulatorfrontends.html
 /doc.php/faq.html /help-faq/;
-/doc.php/gameboy/
-/doc.php/gameboy/basicboy.html
-/doc.php/gameboy/bgb.html
-/doc.php/gameboy/dreamgbc.html
-/doc.php/gameboy/gest.html
-/doc.php/gameboy/gnuboy.html
-/doc.php/gameboy/kigb.html
-/doc.php/gameboy/playguy.html
-/doc.php/gameboy/tgbdual.html
-/doc.php/gameboy/zboy.html
+/doc.php/gameboy/ /gameboy/;
+/doc.php/gameboy/basicboy.html /gameboy/;
+/doc.php/gameboy/bgb.html /gameboy/bgb/;
+/doc.php/gameboy/dreamgbc.html /gameboy/;
+/doc.php/gameboy/gest.html /gameboy/;
+/doc.php/gameboy/gnuboy.html /gameboy/;
+/doc.php/gameboy/kigb.html /gameboy/;
+/doc.php/gameboy/playguy.html /gameboy/;
+/doc.php/gameboy/tgbdual.html /gameboy/;
+/doc.php/gameboy/zboy.html /gameboy/;
 /doc.php/gamecube/ /gamecube-wii-wii-u/;
 /doc.php/gamecube/dolphin.html /gamecube-wii-wii-u/dolphin/;
 /doc.php/gamecube/dolwin.html
@@ -130,13 +130,13 @@
 /doc.php/n64/trwin.html /n64/;
 /doc.php/n64/ultrahle.html /history/ultrahle/;
 /doc.php/n64/ultrahle2064.html /n64/;
-/doc.php/nds/
-/doc.php/nds/desmume.html
-/doc.php/nds/dsemu.html
-/doc.php/nds/dualis.html
-/doc.php/nds/duos.html
-/doc.php/nds/ideas.html
-/doc.php/nds/neonds.html
+/doc.php/nds/ /nds/;
+/doc.php/nds/desmume.html /nds/desmume/;
+/doc.php/nds/dsemu.html /nds/;
+/doc.php/nds/dualis.html /nds/;
+/doc.php/nds/duos.html /nds/;
+/doc.php/nds/ideas.html /nds/;
+/doc.php/nds/neonds.html /nds/;
 /doc.php/nes/ /nes/;
 /doc.php/nes/80five.html /nes/;
 /doc.php/nes/fakenes.html /nes/;
@@ -224,11 +224,11 @@
 /doc.php/snes/zsnes.html /history/zsnes/;
 /doc.php/utilities/ /utilities/;
 /doc.php/utilities/utils2.html /utilities/;
-/doc.php/virtualboy/
-/doc.php/virtualboy/reality_boy.html
-/doc.php/virtualboy/red_dragon.html
-/doc.php/virtualboy/vbjin.html
-/doc.php/virtualboy/virtual-e.html
+/doc.php/virtualboy/ /virtualboy/;
+/doc.php/virtualboy/reality_boy.html /virtualboy/;
+/doc.php/virtualboy/red_dragon.html /virtualboy/;
+/doc.php/virtualboy/vbjin.html /virtualboy/vbjin/;
+/doc.php/virtualboy/virtual-e.html /virtualboy/;
 /doc.php/wii/ /gamecube-wii-wii-u/;
 /doc.php/wiiu/ /gamecube-wii-wii-u/;
 /doc.php/wiiu/cemu.html /gamecube-wii-wii-u/cemu/;
