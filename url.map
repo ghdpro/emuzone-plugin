@@ -37,7 +37,7 @@
 /doc.php/computer/vice.html
 /doc.php/computer/yape.html
 /doc.php/contact.html
-/doc.php/dreamcast/
+/doc.php/dreamcast/ /dreamcast/;
 /doc.php/dreamcast/chankast.html
 /doc.php/dreamcast/demul.html
 /doc.php/dreamcast/dreamemu.html
@@ -150,7 +150,7 @@
 /doc.php/nes/nemulator.html /nes/;
 /doc.php/nes/nesten.html /nes/;
 /doc.php/nes/nesterj.html /nes/;
-/doc.php/nes/nesticle.html /nes/;
+/doc.php/nes/nesticle.html #TO-DO#
 /doc.php/nes/nestopia.html /nes/nestopia/;
 /doc.php/nes/nintendulator.html /nes/nintendulator/;
 /doc.php/nes/olafnes.html /nes/;
@@ -190,15 +190,16 @@
 /doc.php/psp/ppsspp.html
 /doc.php/psp/pspe.html
 /doc.php/psx/ /psx/;
-/doc.php/psx/andripsx.html
-/doc.php/psx/bleem.html
+/doc.php/psx/andripsx.html /psx/;
+/doc.php/psx/bleem.html #TO-DO#
 /doc.php/psx/epsxe.html /psx/epsxe/;
-/doc.php/psx/pcsx-reloaded.html
-/doc.php/psx/pcsx.html
-/doc.php/psx/psxeven.html
-/doc.php/psx/psxplugins-tools.html
-/doc.php/psx/psx_em.html
-/doc.php/psx/ssspsx.html
+/doc.php/psx/pcsx-reloaded.html /psx/;
+/doc.php/psx/pcsx.html /psx/;
+/doc.php/psx/psxeven.html /psx/;
+/doc.php/psx/psxplugins-tools.html /psx/;
+/doc.php/psx/psx_em.html /psx/;
+/doc.php/psx/ssspsx.html /psx/;
+/doc.php/psx/ssspsx.html /psx/;
 /doc.php/roms.html
 /doc.php/rss.html
 /doc.php/saturn/
@@ -235,7 +236,7 @@
 /doc.php/wonderswan/
 /doc.php/wonderswan/cygne.html
 /doc.php/wonderswan/oswan.html
-/doc.php/xbox/
+/doc.php/xbox/ /xbox/;
 /doc.php/xbox/cxbx.html
 /doc.php/xbox/dxbx.html
 /doc.php/xbox/onthebox.html
