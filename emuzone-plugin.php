@@ -20,19 +20,34 @@ $legacydb = null;
  */
 function emuzone_plugin_install() {
 	global $wpdb;
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	$emuzone_plugin_db_version = '1.0';
-	$table_name = $wpdb->prefix . 'ezvotes';
+	add_option( 'emuzone_plugin_db_version', $emuzone_plugin_db_version );
 	$charset_collate = $wpdb->get_charset_collate();
-	$sql = "CREATE TABLE $table_name (
+	// "ezvotes" table
+	$table_name = $wpdb->prefix . 'ezvotes';
+	$sql = "CREATE TABLE {$table_name} (
   	emulator_id varchar(50) NOT NULL,
   	user_hash varchar(50) NOT NULL,
   	rating smallint(3) NOT NULL,
   	vote_date timestamp NOT NULL DEFAULT current_timestamp(),
   	PRIMARY KEY  (emulator_id, user_hash)
-	) $charset_collate;";
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	) {$charset_collate};";
 	dbDelta( $sql );
-	add_option( 'emuzone_plugin_db_version', $emuzone_plugin_db_version );
+	unset( $sql );
+	// "ezfiles" table
+	$table_name = $wpdb->prefix . 'ezfiles';
+	$sql = "CREATE TABLE {$table_name} (
+  	id bigint(20) NOT NULL,
+  	emulator_id varchar(50) NOT NULL,
+  	active_file bigint(20) NULL,
+  	user_id bigint(20) NOT NULL,
+  	updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    PRIMARY KEY  (id),
+    KEY emulator_id (emulator_id)
+	) {$charset_collate};";
+	dbDelta( $sql );
+	unset( $sql );
 }
 register_activation_hook( __FILE__, 'emuzone_plugin_install' );
 
@@ -180,3 +195,25 @@ function emuzone_get_ip() {
 		$result = $_SERVER["REMOTE_ADDR"];
 	return $result;
 }
+
+require_once( plugin_dir_path( __FILE__ ) . '/classes/class-fileman.php' );
+
+/**
+ * Register File Manager custom admin page
+ *
+ * @return void
+ */
+function emuzone_register_fileman_menu() {
+	$fileman = new Fileman( plugin_dir_path( __FILE__ ) . '/templates' );
+
+	add_menu_page(
+		$fileman->get_page_title(),
+		$fileman->get_menu_title(),
+		$fileman->get_capability(),
+		$fileman->get_menu_slug(),
+		array( $fileman, 'render' ),
+		$fileman->get_menu_icon_url(),
+		$fileman->get_menu_position(),
+	);
+}
+add_action( 'admin_menu', 'emuzone_register_fileman_menu' );
