@@ -3,7 +3,7 @@
 /doc.php/3do/4do.html
 /doc.php/3do/freedo.html
 /doc.php/3ds/ /3ds/;
-/doc.php/3ds/citra.html /3ds/citra/;
+/doc.php/history/citra.html /history/citra/;
 /doc.php/a2600/ /atari/;
 /doc.php/a2600/stella.html /atari/stella/;
 /doc.php/a2600/z26.html /atari/;
@@ -162,7 +162,7 @@
 /doc.php/ngpc/koyote.html
 /doc.php/nsw/ /switch/;
 /doc.php/nsw/ryujinx.html /switch/ryujinx/;
-/doc.php/nsw/yuzu.html /switch/yuzu/;
+/doc.php/nsw/yuzu.html /history/yuzu/;
 /doc.php/patches.html
 /doc.php/pcengine/
 /doc.php/pcengine/hu6280.html
@@ -243,7 +243,7 @@
 /doc.php/xbox/xeon.html
 /doc.php/xbox360/
 /doc.php/xbox360/xenia.html
-/3ds/citra /3ds/citra/;
+/3ds/citra /history/citra/;
 /arcade/mame /arcade/mame/;
 /gba/mgba /gba/mgba/;
 /misc/bizhawk /multi/bizhawk/;
