@@ -44,7 +44,7 @@ function emuzone_plugin_install() {
   	user_id bigint(20) NOT NULL,
   	updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     PRIMARY KEY  (id),
-    KEY emulator_id (emulator_id)
+    UNIQUE emulator_id (emulator_id)
 	) {$charset_collate};";
 	dbDelta( $sql );
 	unset( $sql );
@@ -197,6 +197,7 @@ function emuzone_get_ip() {
 }
 
 require_once( plugin_dir_path( __FILE__ ) . '/classes/class-fileman.php' );
+require_once( plugin_dir_path( __FILE__ ) . '/classes/class-ezfiles.php' );
 
 /**
  * Register File Manager custom admin page
@@ -217,3 +218,22 @@ function emuzone_register_fileman_menu() {
 	);
 }
 add_action( 'admin_menu', 'emuzone_register_fileman_menu' );
+
+/**
+ * Register File Handles custom admin page
+ *
+ * @return void
+ */
+function emuzone_register_ezfiles_menu() {
+	$ezfiles = new ezFiles( plugin_dir_path( __FILE__ ) . '/templates' );
+
+	add_submenu_page(
+		$ezfiles->get_parent_slug(),
+		$ezfiles->get_page_title(),
+		$ezfiles->get_menu_title(),
+		$ezfiles->get_capability(),
+		$ezfiles->get_menu_slug(),
+		array( $ezfiles, 'render' ),
+	);
+}
+add_action( 'admin_menu', 'emuzone_register_ezfiles_menu' );
