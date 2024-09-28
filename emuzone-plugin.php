@@ -18,7 +18,7 @@ $legacydb = null;
  *
  * @return void
  */
-function emuzone_plugin_install() {
+function emuzone_plugin_install(): void {
 	global $wpdb;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	$emuzone_plugin_db_version = '1.0';
@@ -38,7 +38,7 @@ function emuzone_plugin_install() {
 	// "ezfiles" table
 	$table_name = $wpdb->prefix . 'ezfiles';
 	$sql = "CREATE TABLE {$table_name} (
-  	id bigint(20) NOT NULL,
+  	id bigint(20) NOT NULL AUTO_INCREMENT,
   	emulator_id varchar(50) NOT NULL,
   	active_file bigint(20) NULL,
   	user_id bigint(20) NOT NULL,
@@ -58,7 +58,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
  *
  * @return void
  */
-function emuzone_legacydb_connect() {
+function emuzone_legacydb_connect(): void {
 	global $legacydb;
 	if ( is_null( $legacydb ) or !( $legacydb instanceof wpdb ) )
 		$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
@@ -74,7 +74,7 @@ function emuzone_legacydb_connect() {
  *
  * @return mixed
  */
-function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
+function filter_block_categories_when_post_provided( $block_categories, $editor_context ): mixed {
 	if ( ! empty( $editor_context->post ) ) {
 		$block_categories[] = array(
 			'slug'  => 'emuzone',
@@ -95,7 +95,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'blocks/block-download.php' );
  *
  * @return void
  */
-function emuzone_plugin_block_init() {
+function emuzone_plugin_block_init(): void {
 	acf_register_block_type( array(
 		'name' => 'emuzone-plugin/section',
 		'title' => 'EZ Section',
@@ -142,7 +142,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/classes/class-topdownloadswidget.p
  *
  * @return void
  */
-function emuzone_plugin_widgets_init() {
+function emuzone_plugin_widgets_init(): void {
 	register_widget( 'TopDownloadsWidget' );
 }
 add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
@@ -152,7 +152,7 @@ add_action( 'widgets_init', 'emuzone_plugin_widgets_init' );
  *
  * @return void
  */
-function emuzone_register_dashboard_widget() {
+function emuzone_register_dashboard_widget(): void {
 	add_meta_box( 'emuzone_dashboard', 'The Emulator Zone', 'emuzone_dashboard_widget', 'dashboard', 'normal', 'high' );
 }
 add_action( 'wp_dashboard_setup', 'emuzone_register_dashboard_widget' );
@@ -162,7 +162,7 @@ add_action( 'wp_dashboard_setup', 'emuzone_register_dashboard_widget' );
  *
  * @return void
  */
-function emuzone_dashboard_widget( $post, $callback_args ) {
+function emuzone_dashboard_widget( $post, $callback_args ): void {
 	$widget = plugin_dir_path( __FILE__ ) . 'private/dashboard.html';
 	if ( file_exists( $widget ) ) {
 		include( $widget );
@@ -176,7 +176,7 @@ function emuzone_dashboard_widget( $post, $callback_args ) {
  *
  * @return mixed|string
  */
-function emuzone_get_ip() {
+function emuzone_get_ip(): mixed {
 	$result = '';
 	if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 		$result = $_SERVER['HTTP_CLIENT_IP'];
@@ -204,7 +204,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/classes/class-ezfiles.php' );
  *
  * @return void
  */
-function emuzone_register_fileman_menu() {
+function emuzone_register_fileman_menu(): void {
 	$fileman = new Fileman( plugin_dir_path( __FILE__ ) . '/templates' );
 
 	add_menu_page(
@@ -224,7 +224,7 @@ add_action( 'admin_menu', 'emuzone_register_fileman_menu' );
  *
  * @return void
  */
-function emuzone_register_ezfiles_menu() {
+function emuzone_register_ezfiles_menu(): void {
 	$ezfiles = new ezFiles( plugin_dir_path( __FILE__ ) . '/templates' );
 
 	add_submenu_page(
@@ -233,7 +233,13 @@ function emuzone_register_ezfiles_menu() {
 		$ezfiles->get_menu_title(),
 		$ezfiles->get_capability(),
 		$ezfiles->get_menu_slug(),
-		array( $ezfiles, 'render' ),
+		array( $ezfiles, 'controller' ),
 	);
 }
 add_action( 'admin_menu', 'emuzone_register_ezfiles_menu' );
+
+function emuzone_register_ezfiles_post(): void {
+	$ezfiles = new ezFiles( plugin_dir_path( __FILE__ ) . '/templates' );
+	$ezfiles->controller();
+}
+add_action( 'admin_post_ezfiles', 'emuzone_register_ezfiles_post' );

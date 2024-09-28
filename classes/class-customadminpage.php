@@ -78,20 +78,55 @@ class CustomAdminPage {
 	 *
 	 * @param string $template
 	 */
-	private function render_template( string $template ) {
+	private function render_template( string $template, array $vars = array() ): void {
 		$template_file = $this->template_path . '/' . $template . '.php';
 
 		if ( ! is_readable( $template_file ) ) {
 			return;
 		}
 
+		// Calling functions can pass an array with variables to be injected in current scope
+		extract( $vars );
 		include $template_file;
 	}
 
 	/**
 	 * Renders custom admin page
 	 */
-	public function render() {
-		$this->render_template( $this->get_menu_slug() );
+	public function render( array $vars = array() ): void {
+		$this->render_template( $this->get_menu_slug(), $vars );
+	}
+
+	/**
+	 * Render form for custom admin page
+	 */
+	public function render_form( array $vars = array() ): void {
+		$this->render_template( $this->get_menu_slug() . '-form', $vars );
+	}
+
+	/**
+	 * Sets message (for display after redirect)
+	 */
+	public function set_message( string $message_type, string $message ): void {
+		$transient = $this->get_menu_slug() . '_message_' . get_current_user_id();
+		set_transient( $transient, array( 'type' => $message_type,
+		                                  'message' => $message),
+			DAY_IN_SECONDS );
+	}
+
+	/**
+	 * Displays message (if one is set). Removes message after display.
+	 */
+	public function display_message(): void {
+		$transient = $this->get_menu_slug() . '_message_' . get_current_user_id();
+		$message = get_transient( $transient );
+		if ( $message !== false ) {
+			wp_admin_notice( $message['message'], array(
+				'type' => $message['type'],
+				'dismissible' => true,
+				'additional_classes' => array( 'notice-alt' ),
+			));
+			delete_transient( $transient );
+		}
 	}
 }
