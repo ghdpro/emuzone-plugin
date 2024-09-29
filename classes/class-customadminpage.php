@@ -77,8 +77,9 @@ class CustomAdminPage {
 	 * Renders the given template if it's readable
 	 *
 	 * @param string $template
+	 * @param mixed $vars
 	 */
-	private function render_template( string $template, array $vars = array() ): void {
+	private function render_template( string $template, mixed $vars = array() ): void {
 		$template_file = $this->template_path . '/' . $template . '.php';
 
 		if ( ! is_readable( $template_file ) ) {
@@ -86,21 +87,23 @@ class CustomAdminPage {
 		}
 
 		// Calling functions can pass an array with variables to be injected in current scope
-		extract( $vars );
+		if ( is_array( $vars ) ) {
+			extract( $vars );
+		}
 		include $template_file;
 	}
 
 	/**
 	 * Renders custom admin page
 	 */
-	public function render( array $vars = array() ): void {
+	public function render( mixed $vars = array() ): void {
 		$this->render_template( $this->get_menu_slug(), $vars );
 	}
 
 	/**
 	 * Render custom template for custom admin page
 	 */
-	protected function render_custom( $template, $vars ): void {
+	protected function render_custom( $template, mixed $vars = array() ): void {
 		$this->render_template( $this->get_menu_slug() . '-' . $template, $vars );
 	}
 
