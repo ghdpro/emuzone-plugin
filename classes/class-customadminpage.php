@@ -98,10 +98,10 @@ class CustomAdminPage {
 	}
 
 	/**
-	 * Render form for custom admin page
+	 * Render custom template for custom admin page
 	 */
-	public function render_form( array $vars = array() ): void {
-		$this->render_template( $this->get_menu_slug() . '-form', $vars );
+	protected function render_custom( $template, $vars ): void {
+		$this->render_template( $this->get_menu_slug() . '-' . $template, $vars );
 	}
 
 	/**
