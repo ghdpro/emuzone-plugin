@@ -44,7 +44,47 @@ function emuzone_plugin_install(): void {
   	user_id bigint(20) NOT NULL,
   	updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     PRIMARY KEY  (id),
-    UNIQUE emulator_id (emulator_id)
+    UNIQUE KEY emulator_id (emulator_id)
+	) {$charset_collate};";
+	dbDelta( $sql );
+	unset( $sql );
+	// "ezdownloads" table
+	$table_name = $wpdb->prefix . 'ezdownloads';
+	$sql = "CREATE TABLE {$table_name} (
+	id bigint(20) NOT NULL AUTO_INCREMENT,
+	emulator_id bigint(20) DEFAULT NULL,
+	path varchar(250) DEFAULT NULL,
+	filename varchar(250) DEFAULT NULL,
+	pathinfo varchar(250) DEFAULT NULL,
+	filename_origin varchar(259) DEFAULT NULL,
+	name varchar(100) DEFAULT NULL,
+	version varchar(100) DEFAULT NULL,
+	description varchar(250) DEFAULT NULL,
+	platform smallint(6) DEFAULT NULL,
+	license smallint(6) DEFAULT NULL,
+	release_date date DEFAULT NULL,
+	size bigint(20) DEFAULT NULL,
+	checksum_sha256 varchar(50) DEFAULT NULL,
+  	homepage1_url varchar(250) DEFAULT NULL,
+  	homepage1_safe tinyint(1) DEFAULT NULL,
+  	homepage1_checked timestamp NULL DEFAULT NULL,
+  	homepage2_url varchar(250) DEFAULT NULL,
+  	homepage2_safe tinyint(1) DEFAULT NULL,
+  	homepage2_checked timestamp NULL DEFAULT NULL,
+  	origin_url varchar(250) DEFAULT NULL,
+  	file_safe tinyint(1) DEFAULT NULL,
+  	file_checked timestamp NULL DEFAULT NULL,
+  	downloads bigint(20) NOT NULL,
+  	source1_url varchar(250) DEFAULT NULL,
+  	source2_url varchar(250) DEFAULT NULL,
+  	user_id bigint(20) NOT NULL,
+  	updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  	PRIMARY KEY  (id),
+  	KEY emulator_id (emulator_id),
+  	KEY pathinfo (pathinfo),
+  	KEY downloads (downloads),
+  	KEY source1_url (source1_url),
+  	KEY source2_url (source2_url)
 	) {$charset_collate};";
 	dbDelta( $sql );
 	unset( $sql );
@@ -198,6 +238,7 @@ function emuzone_get_ip(): mixed {
 
 require_once( plugin_dir_path( __FILE__ ) . '/classes/class-fileman.php' );
 require_once( plugin_dir_path( __FILE__ ) . '/classes/class-ezfiles.php' );
+require_once( plugin_dir_path( __FILE__ ) . '/classes/class-ezdownloads.php' );
 
 /**
  * Register File Manager custom admin page
@@ -243,3 +284,29 @@ function emuzone_register_ezfiles_post(): void {
 	$ezfiles->controller();
 }
 add_action( 'admin_post_ezfiles', 'emuzone_register_ezfiles_post' );
+
+/**
+ * Register Downloads custom admin page
+ *
+ * @return void
+ */
+function emuzone_register_ezdownloads_menu(): void {
+	$ezdownloads = new ezDownloads( plugin_dir_path( __FILE__ ) . '/templates' );
+
+	add_submenu_page(
+		$ezdownloads->get_parent_slug(),
+		$ezdownloads->get_page_title(),
+		$ezdownloads->get_menu_title(),
+		$ezdownloads->get_capability(),
+		$ezdownloads->get_menu_slug(),
+		array( $ezdownloads, 'controller' ),
+	);
+}
+add_action( 'admin_menu', 'emuzone_register_ezdownloads_menu' );
+
+function emuzone_register_ezdownloads_post(): void {
+	$ezdownloads = new ezDownloads( plugin_dir_path( __FILE__ ) . '/templates' );
+	$ezdownloads->controller();
+}
+add_action( 'admin_post_ezdownloads', 'emuzone_register_ezdownloads_post' );
+
