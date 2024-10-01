@@ -92,6 +92,12 @@ class ezFiles extends CustomAdminPage {
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
 			return;
 		}
+		// Check minimum and maximum length
+		if ( ( strlen( $handle ) < 3 ) || ( strlen( $handle ) > 40 ) ) {
+			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is either too short or too long. Length must be between 3 and 40 characters.' );
+			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
+			return;
+		}
 		// Check if it doesn't already exist
 		$wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE emulator_id = %s", $handle ) );
 		if ( $wpdb->num_rows > 0 ) {
@@ -125,6 +131,12 @@ class ezFiles extends CustomAdminPage {
 		if ( ! preg_match( '/^[a-z0-9-_]+$/', $handle ) ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is invalid: only a-z, 0-9, hyphen or underscore are allowed.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=edit&id=' . $id ) );
+			return;
+		}
+		// Check minimum and maximum length
+		if ( ( strlen( $handle ) < 3 ) || ( strlen( $handle ) > 40 ) ) {
+			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is either too short or too long. Length must be between 3 and 40 characters.' );
+			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
 			return;
 		}
 		// Check if it doesn't already exist
@@ -243,9 +255,11 @@ class ezFiles_List_Table extends WP_List_Table {
 	function column_emulator_id( $item ) {
 		$actions = array(
 			'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id'] ),
-			'delete' => sprintf( '<a href="?page=%s&action=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id'] ),
 		);
-
+		// Don't show delete link if not eligible for deletion anyway
+		if ( $item['active_file'] == 0 ) {
+			$actions['delete'] = sprintf( '<a href="?page=%s&action=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id'] );
+		}
 		return sprintf( '%1$s %2$s', $item['emulator_id'], $this->row_actions( $actions ) );
 	}
 
