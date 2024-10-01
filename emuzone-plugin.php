@@ -310,3 +310,7 @@ function emuzone_register_ezdownloads_post(): void {
 }
 add_action( 'admin_post_ezdownloads', 'emuzone_register_ezdownloads_post' );
 
+function emuzone_plugin_admin_scripts(): void {
+	wp_enqueue_script( 'htmx', plugin_dir_url( __FILE__ ) . 'assets/htmx.min.js', array(), '2.0.2' );
+}
+add_action( 'admin_enqueue_scripts', 'emuzone_plugin_admin_scripts' );
