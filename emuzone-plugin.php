@@ -95,8 +95,25 @@ function emuzone_plugin_install(): void {
 	) {$charset_collate};";
 	dbDelta( $sql );
 	unset( $sql );
+	if ( ! defined( 'EMUZONE_DOWNLOAD_URL' ) || ! defined( 'EMUZONE_DOWNLOAD_PATH' ) ) {
+		set_transient( 'emuzone_admin_notice', '<b>Error</b>: Please set <code>EMUZONE_DOWNLOAD_URL</code> and/or <code>EMUZONE_DOWNLOAD_PATH</code> constants in <code>wp-config.php</code> file.', DAY_IN_SECONDS );
+	}
 }
 register_activation_hook( __FILE__, 'emuzone_plugin_install' );
+
+function emuzone_admin_notice(): void {
+	$transient = 'emuzone_admin_notice';
+	$message = get_transient( $transient );
+	if ( $message !== false ) {
+		wp_admin_notice( $message, array(
+			'type' => 'error',
+			'dismissible' => true,
+			'additional_classes' => array( 'notice-alt' ),
+		));
+		delete_transient( $transient );
+	}
+}
+add_action( 'admin_notices', 'emuzone_admin_notice' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
 
