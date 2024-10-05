@@ -160,9 +160,9 @@
 /doc.php/nes/virtuanes.html /nes/;
 /doc.php/ngpc/
 /doc.php/ngpc/koyote.html
-/doc.php/nsw/ /switch/;
-/doc.php/nsw/ryujinx.html /switch/ryujinx/;
-/doc.php/nsw/yuzu.html /history/yuzu/;
+/doc.php/nsw/ /;
+/doc.php/nsw/ryujinx.html /;
+/doc.php/nsw/yuzu.html /;
 /doc.php/patches.html
 /doc.php/pcengine/
 /doc.php/pcengine/hu6280.html
