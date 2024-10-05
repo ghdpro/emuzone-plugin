@@ -90,20 +90,20 @@ class ezFiles extends CustomAdminPage {
 		if ( ! preg_match( '/^[a-z0-9-_]+$/', $handle ) ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is invalid: only a-z, 0-9, hyphen or underscore are allowed.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
-			return;
+			exit;
 		}
 		// Check minimum and maximum length
 		if ( ( strlen( $handle ) < 3 ) || ( strlen( $handle ) > 40 ) ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is either too short or too long. Length must be between 3 and 40 characters.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
-			return;
+			exit;
 		}
 		// Check if it doesn't already exist
 		$wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE emulator_id = %s", $handle ) );
 		if ( $wpdb->num_rows > 0 ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> already exists.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
-			return;
+			exit;
 		}
 		// Insert
 		$result = $wpdb->insert( $wpdb->prefix . $this->get_menu_slug(),
@@ -114,7 +114,7 @@ class ezFiles extends CustomAdminPage {
 		if ( $result !== false ) {
 			$this->set_message( 'success', 'Handle <b>' . esc_html( $handle ) . '</b> added.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() ) );
-			return;
+			exit;
 		} else {
 			wp_die( 'Query failed.' );
 		}
@@ -131,20 +131,20 @@ class ezFiles extends CustomAdminPage {
 		if ( ! preg_match( '/^[a-z0-9-_]+$/', $handle ) ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is invalid: only a-z, 0-9, hyphen or underscore are allowed.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=edit&id=' . $id ) );
-			return;
+			exit;
 		}
 		// Check minimum and maximum length
 		if ( ( strlen( $handle ) < 3 ) || ( strlen( $handle ) > 40 ) ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> is either too short or too long. Length must be between 3 and 40 characters.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=add' ) );
-			return;
+			exit;
 		}
 		// Check if it doesn't already exist
 		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE emulator_id = %s", $handle ) );
 		if ( ( $wpdb->num_rows > 0 ) && $item && ( $item->id != $id ) ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $handle ) . '</b> already exists.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() . '&action=edit&id=' . $id ) );
-			return;
+			exit;
 		}
 		// Update
 		$result = $wpdb->update( $wpdb->prefix . $this->get_menu_slug(),
@@ -159,7 +159,7 @@ class ezFiles extends CustomAdminPage {
 		if ( $result !== false ) {
 			$this->set_message( 'success', 'Handle <b>' . esc_html( $handle ) . '</b> modified.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() ) );
-			return;
+			exit;
 		} else {
 			wp_die( 'Query failed.' );
 		}
@@ -173,7 +173,7 @@ class ezFiles extends CustomAdminPage {
 		if ( $item->active_file > 0 ) {
 			$this->set_message( 'error', 'Handle <b>' . esc_html( $item->handle ) . '</b> has associated downloads and cannot be deleted.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() ) );
-			return;
+			exit;
 		}
 		// Delete
 		$result = $wpdb->delete( $wpdb->prefix . $this->get_menu_slug(),
@@ -184,7 +184,7 @@ class ezFiles extends CustomAdminPage {
 		if ( $result !== false ) {
 			$this->set_message( 'success', 'Handle <b>' . esc_html( $item->handle ) . '</b> deleted.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=' . $this->get_menu_slug() ) );
-			return;
+			exit;
 		} else {
 			wp_die( 'Query failed.' );
 		}
