@@ -53,7 +53,7 @@ function emuzone_plugin_install(): void {
 	$sql = "CREATE TABLE {$table_name} (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	emulator_id bigint(20) DEFAULT NULL,
-	checksum_sha256 varchar(50) NOT NULL,
+	checksum_sha256 varchar(100) NOT NULL,
 	size bigint(20) NOT NULL,
 	filename varchar(250) NOT NULL,
 	name varchar(100) DEFAULT NULL,
