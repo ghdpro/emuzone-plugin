@@ -53,18 +53,15 @@ function emuzone_plugin_install(): void {
 	$sql = "CREATE TABLE {$table_name} (
 	id bigint(20) NOT NULL AUTO_INCREMENT,
 	emulator_id bigint(20) DEFAULT NULL,
-	path varchar(250) DEFAULT NULL,
-	filename varchar(250) DEFAULT NULL,
-	pathinfo varchar(250) DEFAULT NULL,
-	filename_origin varchar(259) DEFAULT NULL,
+	checksum_sha256 varchar(50) NOT NULL,
+	size bigint(20) NOT NULL,
+	filename varchar(250) NOT NULL,
 	name varchar(100) DEFAULT NULL,
 	version varchar(100) DEFAULT NULL,
 	description varchar(250) DEFAULT NULL,
 	platform smallint(6) DEFAULT NULL,
 	license smallint(6) DEFAULT NULL,
 	release_date date DEFAULT NULL,
-	size bigint(20) DEFAULT NULL,
-	checksum_sha256 varchar(50) DEFAULT NULL,
   	homepage1_url varchar(250) DEFAULT NULL,
   	homepage1_safe tinyint(1) DEFAULT NULL,
   	homepage1_checked timestamp NULL DEFAULT NULL,
@@ -74,17 +71,27 @@ function emuzone_plugin_install(): void {
   	origin_url varchar(250) DEFAULT NULL,
   	file_safe tinyint(1) DEFAULT NULL,
   	file_checked timestamp NULL DEFAULT NULL,
-  	downloads bigint(20) NOT NULL,
+  	downloads bigint(20) NOT NULL DEFAULT 0,
   	source1_url varchar(250) DEFAULT NULL,
   	source2_url varchar(250) DEFAULT NULL,
   	user_id bigint(20) NOT NULL,
   	updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   	PRIMARY KEY  (id),
   	KEY emulator_id (emulator_id),
-  	KEY pathinfo (pathinfo),
-  	KEY downloads (downloads),
+  	UNIQUE KEY checksum_sha256 (checksum_sha256),
   	KEY source1_url (source1_url),
   	KEY source2_url (source2_url)
+	) {$charset_collate};";
+	dbDelta( $sql );
+	unset( $sql );
+	// "ezcount" table
+	$table_name = $wpdb->prefix . 'ezcount';
+	$sql = "CREATE TABLE {$table_name} (
+	emulator_id bigint(20) NOT NULL,
+	date_year smallint(4) NOT NULL,
+	date_month tinyint(2) NOT NULL,
+	downloads bigint(20) NOT NULL,
+    PRIMARY KEY  (emulator_id, date_year, date_month)
 	) {$charset_collate};";
 	dbDelta( $sql );
 	unset( $sql );
