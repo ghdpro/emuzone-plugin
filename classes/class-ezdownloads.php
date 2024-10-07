@@ -99,7 +99,6 @@ class ezDownloads extends CustomAdminPage {
 		}
 	}
 
-
 	/**
 	 * Process transfer a download from another site
 	 *
@@ -372,6 +371,45 @@ class ezDownloads extends CustomAdminPage {
 			wp_die( 'Query failed.' );
 		}
 	}
+
+	protected function process_delete(): void {
+		global $wpdb;
+		$id = intval( $_REQUEST['id']  ?? 0 );
+		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE id = %d", $id ) );
+		// If active_file, update it to next latest download
+		$handle = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ezfiles' . " WHERE id = %d", $item->emulator_id ) );
+		if ( $wpdb->num_rows > 0 ) {
+			if ( $handle->active_file == $item->id ) {
+				// Download is indeed active file
+				$next = $wpdb->get_row( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . $this->get_menu_slug()
+				                                        . " WHERE emulator_id = %d AND id != %d ORDER BY release_date DESC, updated DESC LIMIT 0,1", $handle->id, $item->id ) );
+				if ( $wpdb->num_rows > 0 ) {
+					// Next found
+					$wpdb->update( $wpdb->prefix . 'ezfiles', array(
+						'active_file' => $next->id,
+					), array( 'id' => $handle->id ) );
+				} else {
+					// Next not found (=no more downloads), so set to null
+					$wpdb->update( $wpdb->prefix . 'ezfiles', array(
+						'active_file' => null,
+					), array( 'id' => $handle->id ) );
+				}
+			}
+		}
+		// Delete
+		$result = $wpdb->delete( $wpdb->prefix . $this->get_menu_slug(),
+			array(
+				'id' => $id,
+			)
+		);
+		unlink( EMUZONE_DOWNLOAD_PATH . $item->checksum_sha256 );
+		if ( $result !== false ) {
+			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> deleted.' );
+			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
+			exit;
+		} else {
+			wp_die( 'Query failed.' );
+		}	}
 }
 
 class ezDownloads_List_Table extends WP_List_Table {
@@ -387,7 +425,8 @@ class ezDownloads_List_Table extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
 			'handle'    => 'Handle',
-			'name'      => 'File',
+			'name'      => 'Name',
+			'filename'      => 'File',
 			'user_id'   => 'Added by',
 			'updated'   => 'Last Modified'
 		);
@@ -447,12 +486,6 @@ class ezDownloads_List_Table extends WP_List_Table {
 		$actions[ 'delete' ] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Delete</a>', 'delete', $item['id'] );
 
 		$name = $item[ 'name' ] . ' ' . $item[ 'version' ];
-		if ( empty( $item[ 'emulator_id' ] ) ) {
-			// If no "name" set (typically when not linked) show filename as link to link action
-			$name = $item[ 'filename' ];
-			return sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">%s</a> %s', 'link', $item['id'], $name, $this->row_actions( $actions ) );
-		}
-
 		$style = '';
 		if ( $item[ 'id'] != $item[ 'active_file'] ) {
 			$style = ' style="color: #A0A5AA"';
@@ -469,6 +502,11 @@ class ezDownloads_List_Table extends WP_List_Table {
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			$sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
 			$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
+			if ( $_REQUEST['orderby'] == 'name' ) {
+				// When sorting by name, sort by version too
+				$sql .= ', version ';
+				$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
+			}
 		} else {
 			// Default sort order
 			$sql .= ' ORDER BY updated DESC';
@@ -492,7 +530,8 @@ class ezDownloads_List_Table extends WP_List_Table {
 		// Only initial sort column has sort direction indicated
 		return array(
 			'handle'      => array('handle', false, 'Handle', 'Ordered by Handle'),
-			'name'        => array('emulator_id', false, 'File', 'Ordered by File'),
+			'name'        => array('name', false, 'Name', 'Ordered by Name'),
+			'filename'     => array('filename', false, 'File', 'Ordered by File'),
 			'user_id'     => array('user_id', false, 'User', 'Ordered by User'),
 			'updated'     => array('updated', true, 'Date', 'Ordered by Last Modified', 'desc'),
 		);
