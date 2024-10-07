@@ -35,6 +35,7 @@ $ezdownloads->display_message();
 			<input type="hidden" name="action" value="ezdownloads">
 			<input type="hidden" name="form_action" value="upload">
 			<?php wp_nonce_field( 'ezdownloadsupload' ); ?>
+			<input type="hidden" name="MAX_FILE_SIZE" value="268435456" />
 			<input type="file" name="file" required>
 			<button class="button button-primary">Upload</button>
 		</form>

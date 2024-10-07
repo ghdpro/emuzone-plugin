@@ -165,7 +165,55 @@ class ezDownloads extends CustomAdminPage {
 			wp_safe_redirect( admin_url( 'admin.php?page=ezdownloads&action=link&id=' . esc_html( $item->id ) ) );
 			exit;
 		} else {
-			wp_die( 'Query failed.' . $wpdb->last_error . strlen($sha256) );
+			wp_die( 'Query failed.' );
+		}
+	}
+
+	protected function process_upload(): void {
+		global $wpdb;
+		if ( ! isset( $_FILES[ 'file' ] ) || $_FILES[ 'file' ][ 'error' ] != UPLOAD_ERR_OK ) {
+			$this->set_message( 'error', 'Upload failed.' );
+			$redirect = admin_url( 'admin.php?page=fileman' );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Upload failed. <a href="' . $redirect . '">Redirecting...</a>';
+			exit;
+		}
+		// Store file
+		$sha256 = hash_file( 'sha256', $_FILES[ 'file' ][ 'tmp_name' ] );
+		// Check if download already exists
+		$wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE checksum_sha256 = %s", $sha256 ) );
+		if ( $wpdb->num_rows > 0 ) {
+			$this->set_message( 'error', 'File <b>' . esc_html( $_FILES[ 'file' ][ 'name' ] ) . '</b> already exists.' );
+			$redirect = admin_url( 'admin.php?page=fileman' );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Upload failed. <a href="' . $redirect . '">Redirecting...</a>';
+			exit;
+		}
+
+		$dest_file = EMUZONE_DOWNLOAD_PATH . $sha256;
+		$result = move_uploaded_file( $_FILES[ 'file' ][ 'tmp_name' ], $dest_file );
+		if ( $result === false ) {
+			$this->set_message( 'error', 'Failed to move uploaded file <b>' . esc_html( $_FILES[ 'file' ][ 'name' ] ) . '</b>.' );
+			$redirect = admin_url( 'admin.php?page=fileman' );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Upload failed. <a href="' . $redirect . '">Redirecting...</a>';
+			exit;
+		}
+		// Insert
+		$result = $wpdb->insert( $wpdb->prefix . $this->get_menu_slug(),
+			array(
+				'checksum_sha256' => $sha256,
+				'size' => $_FILES[ 'file' ][ 'size' ],
+				'filename' => $_FILES[ 'file' ][ 'name' ],
+				'user_id' => get_current_user_id(),
+				'updated' => date( 'Y-m-d H:i:s' ),
+			) );
+		if ( $result !== false ) {
+			$this->set_message( 'success', 'File <b>' . esc_html( $_FILES[ 'file' ][ 'name' ] ) . '</b> successfully uploaded.' );
+			$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezdownloads WHERE checksum_sha256 = %s", $sha256 ) );
+			// htmx outputs whatever is returned, so do not use regular redirect
+			$redirect = admin_url( 'admin.php?page=ezdownloads&action=link&id=' . esc_html( $item->id ) );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Upload successful. <a href="' . $redirect . '">Redirecting...</a>';
+			exit;
+		} else {
+			wp_die( 'Query failed.');
 		}
 	}
 
