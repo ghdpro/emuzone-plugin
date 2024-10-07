@@ -75,7 +75,7 @@ function emuzone_plugin_install(): void {
   	source1_url varchar(250) DEFAULT NULL,
   	source2_url varchar(250) DEFAULT NULL,
   	user_id bigint(20) NOT NULL,
-  	updated timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  	updated timestamp NOT NULL DEFAULT current_timestamp(),
   	PRIMARY KEY  (id),
   	KEY emulator_id (emulator_id),
   	UNIQUE KEY checksum_sha256 (checksum_sha256),
@@ -339,3 +339,43 @@ function emuzone_plugin_admin_scripts(): void {
 	wp_enqueue_script( 'htmx', plugin_dir_url( __FILE__ ) . 'assets/htmx.min.js', array(), '2.0.2' );
 }
 add_action( 'admin_enqueue_scripts', 'emuzone_plugin_admin_scripts' );
+
+/**
+ * Following three hooks setup /download/ custom URL
+ */
+add_action( 'init',  function() {
+	add_rewrite_rule( 'download/([a-z0-9-]+)[/]?$', 'index.php?ezdownload=$matches[1]', 'top' );
+} );
+
+add_filter( 'query_vars', function( $query_vars ) {
+	$query_vars[] = 'ezdownload';
+	return $query_vars;
+} );
+
+add_filter( 'template_include', function( $template ) {
+	if ( get_query_var( 'ezdownload' ) == false || get_query_var( 'ezdownload' ) == '' ) {
+		return $template;
+	}
+	global $wpdb;
+	// Fetch download
+	$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezdownloads WHERE checksum_sha256 = %s", get_query_var( 'ezdownload' ) ) );
+	if ( $wpdb->num_rows == 0 ) {
+		wp_die('Download <b>' . esc_html( get_query_var( 'ezdownload' ) ) . '</b> not found.' );
+	}
+	$url = EMUZONE_DOWNLOAD_URL . urlencode( $item->checksum_sha256 ) . '/' . urlencode( $item->filename );
+	wp_redirect( $url, 302 );
+	// Count download (ezdownload table)
+	$result = $wpdb->update( $wpdb->prefix . 'ezdownloads',
+		array(
+			'downloads' => ( intval ( $item->downloads ) + 1 ),
+		),
+		array(
+			'id' => $item->id,
+		)
+	);
+	// Count download (ezcount table)
+	$sql = "INSERT INTO {$wpdb->prefix}ezcount (emulator_id,date_year,date_month,downloads) VALUES (%d,%d,%d,%d) ON DUPLICATE KEY UPDATE downloads = downloads + 1";
+	$sql = $wpdb->prepare( $sql, $item->emulator_id, date('Y'), date('m'), 1 );
+	$wpdb->query( $sql );
+	exit;
+} );

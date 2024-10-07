@@ -1,7 +1,11 @@
 <div class="wrap">
 <h1 class="wp-heading-inline"><?=$this->get_page_title();?></h1>
 <hr class="wp-header-end">
-<?php $this->display_message(); ?>
+<?php
+// All messages here will be from EZDownloads class
+$ezdownloads = new EZDownloads( '' ); // Template path not important here
+$ezdownloads->display_message();
+?>
 
 <div class="action-container">
 	<div class="action-box">
@@ -9,7 +13,7 @@
 		<form action="<?php echo esc_html( admin_url( 'admin-post.php' ) ); ?>" method="post">
 			<input type="hidden" name="action" value="ezdownloads">
 			<input type="hidden" name="form_action" value="transfer">
-			<?php wp_nonce_field( 'ezdownloads_upload' ); ?>
+			<?php wp_nonce_field( 'ezdownloadstransfer' ); ?>
 			<table class="form-table">
 				<tbody>
 				<tr>
@@ -30,7 +34,7 @@
 			<progress id="progress" value="0" max="100"></progress>
 			<input type="hidden" name="action" value="ezdownloads">
 			<input type="hidden" name="form_action" value="upload">
-			<?php wp_nonce_field( 'ezdownloads_upload' ); ?>
+			<?php wp_nonce_field( 'ezdownloadsupload' ); ?>
 			<input type="file" name="file" required>
 			<button class="button button-primary">Upload</button>
 		</form>
