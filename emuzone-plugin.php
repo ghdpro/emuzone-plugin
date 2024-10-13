@@ -4,7 +4,7 @@
 Plugin Name: The Emulator Zone
 Plugin URI: https://github.com/ghdpro/emuzone-plugin
 Description: WordPress plugin for The Emulator Zone
-Version: 0.0.1
+Version: 0.1.0
 Author: ghdpro
 Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
@@ -278,7 +278,7 @@ function emuzone_register_fileman_menu(): void {
 		$fileman->get_capability(),
 		$fileman->get_menu_slug(),
 		array( $fileman, 'render' ),
-		$fileman->get_menu_icon_url(),
+		$fileman->get_menu_icon(),
 		$fileman->get_menu_position(),
 	);
 }
@@ -336,7 +336,9 @@ add_action( 'admin_post_ezdownloads', 'emuzone_register_ezdownloads_post' );
 
 function emuzone_plugin_admin_scripts(): void {
 	wp_enqueue_style( 'emuzone-plugin', plugin_dir_url( __FILE__ ) . 'assets/emuzone-plugin.css', array(), '1.0' );
+	wp_enqueue_style( 'sweetalert2-css', plugin_dir_url( __FILE__ ) . 'assets/sweetalert2.min.css', array(), '11.14.3' );
 	wp_enqueue_script( 'htmx', plugin_dir_url( __FILE__ ) . 'assets/htmx.min.js', array(), '2.0.2' );
+	wp_enqueue_script( 'sweetalert2-js', plugin_dir_url( __FILE__ ) . 'assets/sweetalert2.min.js', array(), '11.14.3' );
 }
 add_action( 'admin_enqueue_scripts', 'emuzone_plugin_admin_scripts' );
 

@@ -1,7 +1,6 @@
 <?php
 
 require_once( plugin_dir_path( __DIR__ ) . 'emuzone-plugin.php' );
-require_once( plugin_dir_path( __DIR__ ) . 'legacy-config.php' );
 
 /**
  * Callback for downloads block. Displays downloads from database (or manual entry).
@@ -87,8 +86,7 @@ function filesize_human( int $size ): array {
  * @return void
  */
 function emuzone_download_loop( array $downloads ) {
-	global $legacydb;
-	emuzone_legacydb_connect();
+	global $wpdb;
 	$platformtypes = array( 'N/A', 'DOS', 'Windows', 'Linux', 'Mac', 'Windows (64-bit)', 'Windows (32-bit)' );
 	$licensetypes = array( 'N/A', 'Public Domain', 'Freeware', 'Shareware', 'Demo', 'Open-Source' );
 
@@ -114,8 +112,9 @@ function emuzone_download_loop( array $downloads ) {
 
 			emuzone_download_item( '_blank', $url, $name, $version, $description, $platform, $license, $data, $size_human, $homepage );
 		} else {
-			// Get data from legacy database
-			$data = $legacydb->get_row( $legacydb->prepare( 'SELECT * FROM ez_files WHERE handle="%s"' , $file ), ARRAY_A );
+			$data = $wpdb->get_row( $wpdb->prepare( 'SELECT ' . $wpdb->prefix . 'ezdownloads.*,' . $wpdb->prefix . 'ezfiles.emulator_id AS handle FROM ' . $wpdb->prefix . 'ezfiles '
+													. ' INNER JOIN ' . $wpdb->prefix . 'ezdownloads ON (' . $wpdb->prefix . 'ezdownloads.id = '. $wpdb->prefix . 'ezfiles.active_file)'
+													. ' WHERE '. $wpdb->prefix . 'ezfiles.emulator_id="%s"' , $file ), ARRAY_A );
 
 			// Should return associative array, otherwise just fail with error and do not continue
 			if ( empty( $data ) or !is_array( $data ) ) {
@@ -125,17 +124,17 @@ function emuzone_download_loop( array $downloads ) {
 
 			emuzone_download_item(
 					'_top',
-					strval( LEGACY_DOWNLOAD_URL . $data['pathinfo'] ),
+					get_site_url() . '/download/' . $data[ 'checksum_sha256' ],
 					strval( $data['name'] ),
 					strval( $data['version'] ),
 					strval( $data['description'] ),
 					$platformtypes[ $data['platform'] ],
 					$licensetypes[ $data['license'] ],
-					date( 'M j, Y', $data['dateline'] ),
-					// Get real filesize with: @filesize( LEGACY_FILES_PATH . $data['pathinfo'] )
+					date( 'M j, Y', strtotime( $data['release_date'] ) ),
+					// Get real filesize with: @filesize( EMUZONE_DOWNLOAD_PATH . $data['checksum_sha256'] )
 					// But it's faster to use database value
 					filesize_human( $data['size'] ),
-					strval( $data['homepage'] )
+					strval( $data['homepage1_url'] )
 			);
 		}
 	}

@@ -71,6 +71,9 @@ class ezDownloads extends CustomAdminPage {
 				case 'edit':
 					$this->process_edit();
 					break;
+				case 'active':
+					$this->process_active();
+					break;
 				case 'delete':
 					$this->process_delete();
 					break;
@@ -89,9 +92,6 @@ class ezDownloads extends CustomAdminPage {
 					break;
 				case 'edit':
 					$this->render_custom( 'form', array( 'action' => 'edit', 'action_display' =>'Edit', 'item' => $item ) );
-					break;
-				case 'delete':
-					$this->render_custom( 'delete', array( 'action' => 'delete', 'action_display' =>'Delete', 'item' => $item ) );
 					break;
 				default:
 					$this->render();
@@ -420,6 +420,28 @@ class ezDownloads extends CustomAdminPage {
 		}
 	}
 
+	protected function process_active() {
+		global $wpdb;
+		$id = intval( $_REQUEST['id']  ?? 0 );
+		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE id = %d", $id ) );
+		$handle = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ezfiles' . " WHERE id = %d", $item->emulator_id ) );
+		if ( $handle->active_file != $id ) {
+			$wpdb->update( $wpdb->prefix . 'ezfiles', array(
+				'active_file' => $item->id,
+			), array( 'id' => $handle->id ) );
+			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> set as active download for <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
+			$redirect = admin_url( 'admin.php?page=fileman' );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Active download set. <a href="' . $redirect . '">Redirecting...</a>';
+			exit;
+		} else {
+			// Already active download
+			$this->set_message( 'warning', 'Download <b>' . esc_html( $item->filename ) . '</b> is already active download for <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
+			$redirect = admin_url( 'admin.php?page=fileman' );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Nothing to do. <a href="' . $redirect . '">Redirecting...</a>';
+			exit;
+		}
+	}
+
 	protected function process_delete(): void {
 		global $wpdb;
 		$id = intval( $_REQUEST['id']  ?? 0 );
@@ -453,7 +475,8 @@ class ezDownloads extends CustomAdminPage {
 		unlink( EMUZONE_DOWNLOAD_PATH . $item->checksum_sha256 );
 		if ( $result !== false ) {
 			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> deleted.' );
-			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
+			$redirect = admin_url( 'admin.php?page=fileman' );
+			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Deleted. <a href="' . $redirect . '">Redirecting...</a>';
 			exit;
 		} else {
 			wp_die( 'Query failed.' );
@@ -531,7 +554,14 @@ class ezDownloads_List_Table extends WP_List_Table {
 		} else {
 			$actions['edit'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Edit</a>','edit', $item['id'] );
 		}
-		$actions[ 'delete' ] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Delete</a>', 'delete', $item['id'] );
+
+		if ( ! empty( $item[ 'active_file' ] ) && ( $item[ 'active_file' ] != $item['id'] ) ) {
+			$actions['active'] = sprintf( '<a hx-confirm="Do you want to set <b>%s</b> as active download for handle <b>%s</b> ?" hx-post="?page=ezdownloads&action=%s&id=%s&_wpnonce=%s" href="#">Set Active</a>',
+				htmlentities( $item[ 'filename' ] ), htmlentities( $item[ 'handle' ] ), 'active', $item['id'], wp_create_nonce( 'ezdownloadsactive' ) );
+		}
+
+		$actions['delete'] = sprintf( '<a hx-confirm="Are you sure you want to delete <b>%s</b> ?" hx-post="?page=ezdownloads&action=%s&id=%s&_wpnonce=%s" href="#">Delete</a>',
+			htmlentities( $item[ 'filename' ] ), 'delete', $item['id'], wp_create_nonce( 'ezdownloadsdelete' ) );
 
 		$name = $item[ 'name' ] . ' ' . $item[ 'version' ];
 		$style = '';

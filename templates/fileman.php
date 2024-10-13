@@ -7,6 +7,23 @@ $ezdownloads = new EZDownloads( '' ); // Template path not important here
 $ezdownloads->display_message();
 ?>
 
+<script>
+	document.addEventListener("htmx:confirm", function(e) {
+		if (!e.detail.target.hasAttribute('hx-confirm')) return
+		e.preventDefault()
+		Swal.fire({
+			title: "Confirm",
+			icon: "warning",
+			html: `${e.detail.question}`,
+			showCancelButton: true
+		}).then(function(result) {
+			if (result.isConfirmed) {
+				e.detail.issueRequest(true);
+			}
+		})
+	})
+</script>
+
 <div class="action-container">
 	<div class="action-box">
 		<h2>Transfer</h2>
