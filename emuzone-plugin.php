@@ -138,7 +138,7 @@ function emuzone_legacydb_connect(): void {
  *
  * @return mixed
  */
-function filter_block_categories_when_post_provided( $block_categories, $editor_context ): mixed {
+function filter_block_categories_when_post_provided( $block_categories, $editor_context ) {
 	if ( ! empty( $editor_context->post ) ) {
 		$block_categories[] = array(
 			'slug'  => 'emuzone',
@@ -240,7 +240,7 @@ function emuzone_dashboard_widget( $post, $callback_args ): void {
  *
  * @return mixed|string
  */
-function emuzone_get_ip(): mixed {
+function emuzone_get_ip() {
 	$result = '';
 	if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 		$result = $_SERVER['HTTP_CLIENT_IP'];

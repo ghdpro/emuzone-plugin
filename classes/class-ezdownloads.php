@@ -4,7 +4,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/class-customadminpage.php' );
 require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
 if ( ! function_exists( 'html_selection_box' ) ) :
-	function html_selection_box( string $name = '', array $options = array(), mixed $selected = null ): string {
+	function html_selection_box( string $name = '', array $options = array(), $selected = null ): string {
 		$result = '<select name="' . $name . '" id="' . $name . '">';
 		foreach ( $options as $key => $value ) {
 			$result .= '<option value="' . $key . '"';

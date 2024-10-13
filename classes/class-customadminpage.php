@@ -79,7 +79,7 @@ class CustomAdminPage {
 	 * @param string $template
 	 * @param mixed $vars
 	 */
-	private function render_template( string $template, mixed $vars = null ): void {
+	private function render_template( string $template, $vars = null ): void {
 		$template_file = $this->template_path . '/' . $template . '.php';
 
 		if ( ! is_readable( $template_file ) ) {
@@ -96,14 +96,14 @@ class CustomAdminPage {
 	/**
 	 * Renders custom admin page
 	 */
-	public function render( mixed $vars = null ): void {
+	public function render( $vars = null ): void {
 		$this->render_template( $this->get_menu_slug(), $vars );
 	}
 
 	/**
 	 * Render custom template for custom admin page
 	 */
-	protected function render_custom( $template, mixed $vars = null ): void {
+	protected function render_custom( $template, $vars = null ): void {
 		$this->render_template( $this->get_menu_slug() . '-' . $template, $vars );
 	}
 
