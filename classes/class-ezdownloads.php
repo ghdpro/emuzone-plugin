@@ -413,7 +413,7 @@ class ezDownloads extends CustomAdminPage {
 			)
 		);
 		if ( $result !== false ) {
-			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> modified.' );
+			$this->set_message( 'success', 'Download <b>' . esc_html( $_REQUEST[ 'filename' ] ) . '</b> modified.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
 		} else {
