@@ -583,12 +583,12 @@ class ezDownloads_List_Table extends WP_List_Table {
 		if ( !empty ( $item[ 'homepage1_url' ] ) ) {
 			$result .= sprintf( ' <a target="_blank" href="%s"><span class="dashicons dashicons-admin-home"></span></a> ', esc_url( $item[ 'homepage1_url' ] ) );
 		} else {
-			$result .= ' <span class="dashicons dashicons-admin-home"></span> ';
+			$result .= ' <span class="dashicons dashicons-admin-home" style="color: #A0A5AA"></span> ';
 		}
 		if ( !empty ( $item[ 'source1_url' ] ) ) {
 			$result .= sprintf( ' <a target="_blank" href="%s"><span class="dashicons dashicons-admin-site-alt3"></span></a> ', esc_url( $item[ 'source1_url' ] ) );
 		} else {
-			$result .= ' <span class="dashicons dashicons-admin-site-alt3"></span> ';
+			$result .= ' <span class="dashicons dashicons-admin-site-alt3" style="color: #A0A5AA"></span> ';
 		}
 		return $result;
 	}
