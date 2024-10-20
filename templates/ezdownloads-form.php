@@ -18,6 +18,11 @@
 				<td><input name="release_date" id="release_date" type="text" class="regular-text" value="<?php echo $item->release_date ?? date( 'Y-m-d' ); ?>">
 				<span class="descriptiopn" style="color: #A0A5AA"><br>The release date of the emulator download. Defaults to today's date, but please change to match actual date.</span></td>
 			</tr>
+			<tr>
+				<th scope="row"><label for="filename">Filename</label></th>
+				<td><input name="filename" id="filename" type="text" class="regular-text" required value="<?php echo $item->filename ?? ''; ?>">
+				<span class="description" style="color: #A0A5AA">(<?=filesize_human( $item->size )[0]?> <?=filesize_human( $item->size )[1]?>)</span></td>
+			</tr>
 			<tr id="showmore" <?php if ( empty( $item->name) ) echo ' style="display:none"'; ?>>
 				<th></th>
 				<td><span class="button button-secondary" onclick="document.getElementById('optional').style.display = 'block'; document.getElementById('showmore').style.display = 'none';" href="">Show more fields</span></td>
@@ -26,10 +31,6 @@
 	</table>
 	<table class="form-table" id="optional"  <?php if ( ! empty( $item->name) ) echo ' style="display:none"'; ?>>
 		<tbody>
-			<tr>
-				<th scope="row"><label for="filename">Filename</label></th>
-				<td><input name="filename" id="filename" type="text" class="regular-text" required value="<?php echo $item->filename ?? ''; ?>"></td>
-			</tr>
 			<tr>
 				<th scope="row"><label for="name">Name</label></th>
 				<td><input name="name" id="name" type="text" class="regular-text" required value="<?php echo $item->name ?? ''; ?>"></td>
@@ -57,11 +58,11 @@
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><label for="homepage1_url">Homepage URL</label></th>
+				<th scope="row"><label for="homepage1_url">Homepage URL</label> <span class="dashicons dashicons-admin-home"></span></th>
 				<td><input name="homepage1_url" id="homepage1_url" type="text" class="large-text" value="<?php echo $item->homepage1_url ?? ''; ?>"></td>
 			</tr>
 			<tr>
-				<th scope="row"><label for="source1_url">Source URL</label></th>
+				<th scope="row"><label for="source1_url">Source URL</label> <span class="dashicons dashicons-admin-site-alt3"></span></th>
 				<td><input name="source1_url" id="source1_url" type="text" class="large-text" value="<?php echo $item->source1_url ?? ''; ?>">
 				<span class="descriptiopn" style="color: #A0A5AA"><br>This URL is used to automatically match new downloads in the future. URL should be specific to the emulator, but not specific to a particular version.</span></td>
 			</tr>

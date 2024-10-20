@@ -2,6 +2,7 @@
 
 require_once( plugin_dir_path( __FILE__ ) . '/class-customadminpage.php' );
 require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+require_once( plugin_dir_path( __DIR__ ) . '/blocks/block-download.php' );
 
 if ( ! function_exists( 'html_selection_box' ) ) :
 	function html_selection_box( string $name = '', array $options = array(), $selected = null ): string {
@@ -157,7 +158,7 @@ class ezDownloads extends CustomAdminPage {
 			) );
 		if ( $result !== false ) {
 			// This message may be overwritten bij auto_link()
-			$this->set_message( 'success', 'File <b>' . esc_html( $filename ) . '</b> successfully transferred.' );
+			$this->set_message( 'success', 'File <b>' . esc_html( $filename ) . '</b> (' . filesize_human( $size )[0] . ' ' . filesize_human( $size )[1] . ') successfully transferred.' );
 			$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezdownloads WHERE checksum_sha256 = %s", $sha256 ) );
 			// Attempt auto linking
 			$this->auto_link( $item );
@@ -206,7 +207,7 @@ class ezDownloads extends CustomAdminPage {
 				'updated' => date( 'Y-m-d H:i:s' ),
 			) );
 		if ( $result !== false ) {
-			$this->set_message( 'success', 'File <b>' . esc_html( $_FILES[ 'file' ][ 'name' ] ) . '</b> successfully uploaded.' );
+			$this->set_message( 'success', 'File <b>' . esc_html( $_FILES[ 'file' ][ 'name' ] ) . '</b> (' . filesize_human( $_FILES[ 'file' ][ 'size' ] )[0] . ' ' . filesize_human( $_FILES[ 'file' ][ 'size' ] )[1] . ') successfully uploaded.' );
 			$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezdownloads WHERE checksum_sha256 = %s", $sha256 ) );
 			// htmx outputs whatever is returned, so do not use regular redirect
 			$redirect = admin_url( 'admin.php?page=ezdownloads&action=link&id=' . esc_html( $item->id ) );
@@ -497,7 +498,8 @@ class ezDownloads_List_Table extends WP_List_Table {
 		$columns = array(
 			'handle'    => 'Handle',
 			'name'      => 'Name',
-			'filename'      => 'File',
+			'filename'  => 'File',
+ 			'homepage'  => 'Homepage',
 			'user_id'   => 'Added by',
 			'updated'   => 'Last Modified'
 		);
@@ -570,6 +572,25 @@ class ezDownloads_List_Table extends WP_List_Table {
 		}
 		$url = get_site_url() . '/download/' . $item[ 'checksum_sha256' ];
 		return sprintf( '<a target="_blank" %1s href="%2$s">%3$s</a> %4$s', $style, $url, $name, $this->row_actions( $actions ) );
+	}
+
+	function column_filename( $item ) {
+		return esc_html( $item[ 'filename' ] ).'<br> ('. filesize_human( $item[ 'size' ] )[0] . ' ' . filesize_human( $item[ 'size' ] )[1] .')';
+	}
+
+	function column_homepage( $item ) {
+		$result = '';
+		if ( !empty ( $item[ 'homepage1_url' ] ) ) {
+			$result .= sprintf( ' <a target="_blank" href="%s"><span class="dashicons dashicons-admin-home"></span></a> ', esc_url( $item[ 'homepage1_url' ] ) );
+		} else {
+			$result .= ' <span class="dashicons dashicons-admin-home"></span> ';
+		}
+		if ( !empty ( $item[ 'source1_url' ] ) ) {
+			$result .= sprintf( ' <a target="_blank" href="%s"><span class="dashicons dashicons-admin-site-alt3"></span></a> ', esc_url( $item[ 'source1_url' ] ) );
+		} else {
+			$result .= ' <span class="dashicons dashicons-admin-site-alt3"></span> ';
+		}
+		return $result;
 	}
 
 	public static function get_items( $per_page = 50, $page_number = 1 ) {
