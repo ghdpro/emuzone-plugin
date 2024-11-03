@@ -1,5 +1,6 @@
 <div class="wrap">
 <h1 class="wp-heading-inline"><?=$this->get_page_title();?></h1>
+<a href="<?php echo esc_html( admin_url( 'admin.php?page=ezfiles&action=add' ) ); ?>" class="page-title-action">Add New Handle</a>
 <hr class="wp-header-end">
 <?php
 // All messages here will be from EZDownloads class
@@ -65,10 +66,13 @@ $ezdownloads->display_message();
 </div>
 
 <h2>Downloads</h2>
+<form method="post">
 <?php
 $list = new ezDownloads_List_Table();
 $list->prepare_items();
+$list->search_box( 'search', 'search_id' );
 $list->display();
 ?>
+</form>
 
 </div>

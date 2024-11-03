@@ -598,6 +598,14 @@ class ezDownloads_List_Table extends WP_List_Table {
 
 		$sql = "SELECT {$wpdb->prefix}ezdownloads.*,{$wpdb->prefix}ezfiles.emulator_id AS handle,{$wpdb->prefix}ezfiles.active_file FROM {$wpdb->prefix}ezdownloads";
 		$sql .= " LEFT JOIN {$wpdb->prefix}ezfiles ON {$wpdb->prefix}ezfiles.id = {$wpdb->prefix}ezdownloads.emulator_id";
+		if ( ! empty( $_REQUEST['s'] ) ) {
+			$search = '%' . $wpdb->esc_like( $_REQUEST['s'] ) . '%';
+			$where = ' WHERE ';
+			$where .= $wpdb->prefix . 'ezfiles.emulator_id LIKE "%s" OR ';
+			$where .= $wpdb->prefix . 'ezdownloads.filename LIKE "%s" OR ';
+			$where .= $wpdb->prefix . 'ezdownloads.name LIKE "%s" ';
+			$sql .= $wpdb->prepare( $where, $search, $search, $search );
+		}
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			$sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
 			$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
