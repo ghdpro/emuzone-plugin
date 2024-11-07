@@ -130,7 +130,7 @@ function emuzone_download_loop( array $downloads ) {
 					strval( $data['description'] ),
 					$platformtypes[ $data['platform'] ],
 					$licensetypes[ $data['license'] ],
-					date( 'M j, Y', strtotime( $data['release_date'] ) ),
+					( ! empty( $data['release_date'] ) ? date( 'M j, Y', strtotime( $data['release_date'] ) ) : '-'),
 					// Get real filesize with: @filesize( EMUZONE_DOWNLOAD_PATH . $data['checksum_sha256'] )
 					// But it's faster to use database value
 					filesize_human( $data['size'] ),
