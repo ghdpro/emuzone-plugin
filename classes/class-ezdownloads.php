@@ -49,7 +49,7 @@ class ezDownloads extends CustomAdminPage {
 		} else {
 			$action = strtolower( trim( $_REQUEST['action'] ?? '' ) );
 		}
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+		if (( $_SERVER['REQUEST_METHOD'] == 'POST' ) && ! empty ( $action ) ) {
 			// Verify nonce
 			check_admin_referer( $this->get_menu_slug() . $action );
 			// Verify capability

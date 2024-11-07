@@ -36,7 +36,7 @@ class ezFiles extends CustomAdminPage {
 		} else {
 			$action = strtolower( trim( $_REQUEST['action'] ?? '' ) );
 		}
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+		if (( $_SERVER['REQUEST_METHOD'] == 'POST' ) && ! empty ( $action ) ) {
 			// Verify nonce
 			check_admin_referer( $this->get_menu_slug() . $action);
 			// Verify capability
@@ -204,6 +204,7 @@ class ezFiles_List_Table extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
 			'emulator_id' => 'Handle',
+			'filename'    => 'Active File',
 			'user_id'     => 'Added by',
 			'updated'     => 'Last Modified'
 		);
@@ -263,10 +264,23 @@ class ezFiles_List_Table extends WP_List_Table {
 		return sprintf( '%1$s %2$s', $item['emulator_id'], $this->row_actions( $actions ) );
 	}
 
+	function column_filename( $item ) {
+		$actions = array(
+			'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', 'ezdownloads', 'edit', $item['file_id'] ),
+		);
+		return sprintf( '%1$s %2$s', $item['filename'], $this->row_actions( $actions ) );
+	}
+
 	public static function get_items( $per_page = 50, $page_number = 1 ) {
 		global $wpdb;
 
-		$sql = "SELECT * FROM {$wpdb->prefix}ezfiles";
+		$sql = "SELECT {$wpdb->prefix}ezfiles.*,{$wpdb->prefix}ezdownloads.filename,{$wpdb->prefix}ezdownloads.id AS file_id FROM {$wpdb->prefix}ezfiles";
+		$sql .= " LEFT JOIN {$wpdb->prefix}ezdownloads ON ({$wpdb->prefix}ezdownloads.id = {$wpdb->prefix}ezfiles.active_file) ";
+		if ( ! empty( $_REQUEST['s'] ) ) {
+			$search = '%' . $wpdb->esc_like( $_REQUEST['s'] ) . '%';
+			$where = ' WHERE ' . $wpdb->prefix . 'ezfiles.emulator_id LIKE "%s" ';
+			$sql .= $wpdb->prepare( $where, $search );
+		}
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			$sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
 			$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
@@ -293,6 +307,7 @@ class ezFiles_List_Table extends WP_List_Table {
 		// Only initial sort column has sort direction indicated
 		return array(
 			'emulator_id' => array('emulator_id', false, 'Handle', 'Ordered by Handle'),
+			'filename'     => array('filename', false, 'File', 'Ordered by File'),
 			'user_id'     => array('user_id', false, 'User', 'Ordered by User'),
 			'updated'     => array('updated', true, 'Date', 'Ordered by Last Modified', 'desc'),
 		);

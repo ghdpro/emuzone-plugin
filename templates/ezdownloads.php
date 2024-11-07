@@ -20,10 +20,12 @@
 			})
 		})
 	</script>
-
+	<form method="post">
 	<?php
 	$list = new ezDownloads_List_Table();
 	$list->prepare_items();
+	$list->search_box( 'search', 'search_id' );
 	$list->display();
 	?>
+	</form>
 </div>
