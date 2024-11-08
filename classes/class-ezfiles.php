@@ -265,9 +265,13 @@ class ezFiles_List_Table extends WP_List_Table {
 	}
 
 	function column_filename( $item ) {
-		$actions = array(
-			'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', 'ezdownloads', 'edit', $item['file_id'] ),
-		);
+		if ( ! empty( $item['file_id'] ) ) {
+			$actions = array(
+				'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', 'ezdownloads', 'edit', $item['file_id'] ),
+			);
+		} else {
+			$actions = array();
+		}
 		return sprintf( '%1$s %2$s', $item['filename'], $this->row_actions( $actions ) );
 	}
 
