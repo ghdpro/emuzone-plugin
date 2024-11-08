@@ -4,22 +4,6 @@
 	<hr class="wp-header-end">
 	<?php $this->display_message(); ?>
 
-	<script>
-		document.addEventListener("htmx:confirm", function(e) {
-			if (!e.detail.target.hasAttribute('hx-confirm')) return
-			e.preventDefault()
-			Swal.fire({
-				title: "Confirm",
-				icon: "warning",
-				html: `${e.detail.question}`,
-				showCancelButton: true
-			}).then(function(result) {
-				if (result.isConfirmed) {
-					e.detail.issueRequest(true);
-				}
-			})
-		})
-	</script>
 	<form method="post">
 	<?php
 	$list = new ezDownloads_List_Table();

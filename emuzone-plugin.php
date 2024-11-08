@@ -336,9 +336,7 @@ add_action( 'admin_post_ezdownloads', 'emuzone_register_ezdownloads_post' );
 
 function emuzone_plugin_admin_scripts(): void {
 	wp_enqueue_style( 'emuzone-plugin', plugin_dir_url( __FILE__ ) . 'assets/emuzone-plugin.css', array(), '1.0' );
-	wp_enqueue_style( 'sweetalert2-css', plugin_dir_url( __FILE__ ) . 'assets/sweetalert2.min.css', array(), '11.14.3' );
 	wp_enqueue_script( 'htmx', plugin_dir_url( __FILE__ ) . 'assets/htmx.min.js', array(), '2.0.2' );
-	wp_enqueue_script( 'sweetalert2-js', plugin_dir_url( __FILE__ ) . 'assets/sweetalert2.min.js', array(), '11.14.3' );
 }
 add_action( 'admin_enqueue_scripts', 'emuzone_plugin_admin_scripts' );
 

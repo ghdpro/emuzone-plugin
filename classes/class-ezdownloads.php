@@ -85,7 +85,10 @@ class ezDownloads extends CustomAdminPage {
 			$item = null;
 			$id   = $_REQUEST['id'] ?? 0;
 			if ( $id ) {
-				$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE id = %d", $id ) );
+				$item = $wpdb->get_row( $wpdb->prepare( 'SELECT ' . $wpdb->prefix . 'ezdownloads.*, ' . $wpdb->prefix . 'ezfiles.emulator_id AS handle '
+				                                        .' FROM ' . $wpdb->prefix . 'ezdownloads' .
+				                                        ' LEFT JOIN ' . $wpdb->prefix . 'ezfiles ON (' . $wpdb->prefix . 'ezfiles.id = ' . $wpdb->prefix . 'ezdownloads.emulator_id) ' .
+				                                        " WHERE {$wpdb->prefix}ezdownloads.id = %d", $id ) );
 			}
 			switch ( $action ) {
 				case 'link':
@@ -93,6 +96,12 @@ class ezDownloads extends CustomAdminPage {
 					break;
 				case 'edit':
 					$this->render_custom( 'form', array( 'action' => 'edit', 'action_display' =>'Edit', 'item' => $item ) );
+					break;
+				case 'active':
+					$this->render_custom( 'active', array( 'action' => 'active', 'action_display' =>'Set Active', 'item' => $item ) );
+					break;
+				case 'delete':
+					$this->render_custom( 'delete', array( 'action' => 'delete', 'action_display' =>'Delete', 'item' => $item ) );
 					break;
 				default:
 					$this->render();
@@ -431,14 +440,12 @@ class ezDownloads extends CustomAdminPage {
 				'active_file' => $item->id,
 			), array( 'id' => $handle->id ) );
 			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> set as active download for <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
-			$redirect = admin_url( 'admin.php?page=fileman' );
-			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Active download set. <a href="' . $redirect . '">Redirecting...</a>';
+			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
 		} else {
 			// Already active download
 			$this->set_message( 'warning', 'Download <b>' . esc_html( $item->filename ) . '</b> is already active download for <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
-			$redirect = admin_url( 'admin.php?page=fileman' );
-			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Nothing to do. <a href="' . $redirect . '">Redirecting...</a>';
+			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
 		}
 	}
@@ -476,8 +483,7 @@ class ezDownloads extends CustomAdminPage {
 		unlink( EMUZONE_DOWNLOAD_PATH . $item->checksum_sha256 );
 		if ( $result !== false ) {
 			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> deleted.' );
-			$redirect = admin_url( 'admin.php?page=fileman' );
-			echo '<meta http-equiv="refresh" content="0; url=' . $redirect . '">Deleted. <a href="' . $redirect . '">Redirecting...</a>';
+			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
 		} else {
 			wp_die( 'Query failed.' );
@@ -558,12 +564,10 @@ class ezDownloads_List_Table extends WP_List_Table {
 		}
 
 		if ( ! empty( $item[ 'active_file' ] ) && ( $item[ 'active_file' ] != $item['id'] ) ) {
-			$actions['active'] = sprintf( '<a hx-confirm="Do you want to set <b>%s</b> as active download for handle <b>%s</b> ?" hx-post="?page=ezdownloads&action=%s&id=%s&_wpnonce=%s" href="#">Set Active</a>',
-				htmlentities( $item[ 'filename' ] ), htmlentities( $item[ 'handle' ] ), 'active', $item['id'], wp_create_nonce( 'ezdownloadsactive' ) );
+			$actions['active'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Set Active</a>', 'active', $item['id'] );
 		}
 
-		$actions['delete'] = sprintf( '<a hx-confirm="Are you sure you want to delete <b>%s</b> ?" hx-post="?page=ezdownloads&action=%s&id=%s&_wpnonce=%s" href="#">Delete</a>',
-			htmlentities( $item[ 'filename' ] ), 'delete', $item['id'], wp_create_nonce( 'ezdownloadsdelete' ) );
+		$actions['delete'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Delete</a>', 'delete', $item['id'] );
 
 		$name = $item[ 'name' ] . ' ' . $item[ 'version' ];
 		$style = '';
