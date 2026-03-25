@@ -491,8 +491,8 @@ class ezDownloads extends CustomAdminPage {
 				'id' => $id,
 			)
 		);
-		unlink( EMUZONE_DOWNLOAD_PATH . $item->checksum_sha256 );
 		if ( $result !== false ) {
+			unlink( EMUZONE_DOWNLOAD_PATH . $item->checksum_sha256 );
 			$this->set_message( 'success', 'Download <b>' . esc_html( $item->filename ) . '</b> deleted.' );
 			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
