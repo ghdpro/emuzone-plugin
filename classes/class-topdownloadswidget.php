@@ -26,6 +26,9 @@ class TopDownloadsWidget extends WP_Widget {
 		emuzone_legacydb_connect();
 		$output = '';
 		$result = $legacydb->get_results( 'SELECT name, version, handle FROM ez_files ORDER BY downloads DESC LIMIT 0,10' );
+		if ( is_null( $result ) ) {
+			return '';
+		}
 		$output .= '<ul>' . "\n";
 		foreach ( $result as $row ) {
 			$link = null;
