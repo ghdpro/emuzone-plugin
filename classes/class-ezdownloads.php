@@ -21,6 +21,10 @@ endif;
 
 class ezDownloads extends CustomAdminPage {
 
+	public function get_capability(): string {
+		return 'manage_categories';
+	}
+
 	public function get_menu_title(): string {
 		return 'Downloads';
 	}
@@ -66,7 +70,7 @@ class ezDownloads extends CustomAdminPage {
 				case 'link':
 					$this->process_link();
 					break;
-				case 'search';
+				case 'search':
 					$this->process_search();
 					break;
 				case 'edit':
@@ -116,7 +120,15 @@ class ezDownloads extends CustomAdminPage {
 	 */
 	protected function process_transfer(): void {
 		global $wpdb;
-		$url = strtolower( trim( $_REQUEST['url'] ?? '' ) );
+		$raw_url = trim( $_REQUEST['url'] ?? '' );
+		$url = filter_var( $raw_url, FILTER_SANITIZE_URL );
+		if ( $url === false ) {
+			wp_die( 'Invalid URL.' );
+		}
+		$parts = parse_url( $url );
+		if ( !in_array( strtolower( $parts['scheme'] ?? '' ), array( 'http', 'https' ), true ) ) {
+			wp_die( 'Invalid URL.' );
+		}
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -135,7 +147,6 @@ class ezDownloads extends CustomAdminPage {
 			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
 		}
-		curl_close( $ch );
 		unset( $ch );
 		$filename = basename( parse_url( $url, PHP_URL_PATH ) );
 		$sha256 = hash( 'sha256', $data );

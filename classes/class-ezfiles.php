@@ -8,6 +8,10 @@ require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
  */
 class ezFiles extends CustomAdminPage {
 
+	public function get_capability(): string {
+		return 'manage_categories';
+	}
+
 	public function get_menu_title(): string {
 		return 'Handles';
 	}
