@@ -365,12 +365,10 @@ add_filter( 'template_include', function( $template ) {
 	$url = EMUZONE_DOWNLOAD_URL . urlencode( $item->checksum_sha256 ) . '/' . urlencode( $item->filename );
 	wp_redirect( $url, 302 );
 	// Count download (ezdownload table)
-	$result = $wpdb->update( $wpdb->prefix . 'ezdownloads',
-		array(
-			'downloads' => ( intval ( $item->downloads ) + 1 ),
-		),
-		array(
-			'id' => $item->id,
+	$wpdb->query(
+		$wpdb->prepare(
+			"UPDATE {$wpdb->prefix}ezdownloads SET downloads = downloads + 1 WHERE id = %d",
+			$item->id
 		)
 	);
 	// Count download (ezcount table)
