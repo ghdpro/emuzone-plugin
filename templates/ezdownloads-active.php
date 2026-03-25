@@ -1,4 +1,4 @@
-<h1><?=$action_display?> Download</h1>
+<h1><?=esc_html( $action_display )?> Download</h1>
 <hr class="wp-header-end">
 <?php $this->display_message(); ?>
 
@@ -6,7 +6,7 @@
 	<input type="hidden" name="action" value="<?=esc_attr( $this->get_menu_slug() )?>">
 	<input type="hidden" name="form_action" value="<?=esc_attr( $action )?>">
 	<?php wp_nonce_field( $this->get_menu_slug() . $action ); ?>
-	<input type="hidden" name="id" value="<?=esc_attr( $item->id) ?>'">
+	<input type="hidden" name="id" value="<?=esc_attr( $item->id) ?>">
 	Are you sure you want to set the active download for handle <b><?=esc_attr( $item->handle )?></b> to <b><?=esc_attr( $item->filename )?></b>?
 	<table class="form-table">
 		<tbody>

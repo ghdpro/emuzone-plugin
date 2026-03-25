@@ -1,10 +1,10 @@
-<h1><?=$action_display?> Download <?php echo esc_html( $item->filename ); ?></h1>
+<h1><?=esc_html( $action_display )?> Download <?php echo esc_html( $item->filename ); ?></h1>
 <hr class="wp-header-end">
 <?php $this->display_message(); ?>
 
 <form action="<?php echo esc_html( admin_url( 'admin-post.php' ) ); ?>" method="post">
 	<input type="hidden" name="action" value="<?=esc_attr( $this->get_menu_slug() )?>">
-	<input type="hidden" name="form_action" value="<?=$action?>">
+	<input type="hidden" name="form_action" value="<?=esc_attr( $action )?>">
 	<?php wp_nonce_field( $this->get_menu_slug() . $action ); ?>
 	<input type="hidden" name="id" value="<?=esc_attr( $item->id )?>">
 	<table class="form-table">
@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<th scope="row"><label for="filename">Filename</label></th>
-				<td><input name="filename" id="filename" type="text" class="regular-text" required value="<?php echo $item->filename ?? ''; ?>">
+				<td><input name="filename" id="filename" type="text" class="regular-text" required value="<?php echo esc_attr( $item->filename ?? '' ); ?>">
 				<span class="description" style="color: #A0A5AA">(<?=filesize_human( $item->size )[0]?> <?=filesize_human( $item->size )[1]?>)</span></td>
 			</tr>
 			<tr id="showmore" <?php if ( empty( $item->name) ) echo ' style="display:none"'; ?>>
