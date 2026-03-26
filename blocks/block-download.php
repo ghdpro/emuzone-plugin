@@ -170,7 +170,7 @@ function emuzone_download_item( string $target, string $url, string $name, strin
 		<td data-th="Site">
 			<?php
 				if ( !empty( $homepage ) )
-					echo '<a target="_blank" href="' . esc_url( $homepage ) .'" title="' . esc_attr( $name ) . ' homepage"><i class="fas fa-home"></i></a>';
+					echo '<a target="_blank" rel="noopener" href="' . esc_url( $homepage ) .'" title="' . esc_attr( $name ) . ' homepage"><i class="fas fa-home"></i></a>';
 				else
 					echo '<i class="fas fa-home text-muted" title="Site not available"></i>';
 			?>
