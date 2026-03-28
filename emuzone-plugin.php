@@ -363,7 +363,6 @@ add_filter( 'template_include', function( $template ) {
 		wp_die('Download <b>' . esc_html( get_query_var( 'ezdownload' ) ) . '</b> not found.' );
 	}
 	$url = EMUZONE_DOWNLOAD_URL . urlencode( $item->checksum_sha256 ) . '/' . urlencode( $item->filename );
-	wp_redirect( $url, 302 );
 	// Count download (ezdownload table)
 	$wpdb->query(
 		$wpdb->prepare(
@@ -375,5 +374,6 @@ add_filter( 'template_include', function( $template ) {
 	$sql = "INSERT INTO {$wpdb->prefix}ezcount (emulator_id,date_year,date_month,downloads) VALUES (%d,%d,%d,%d) ON DUPLICATE KEY UPDATE downloads = downloads + 1";
 	$sql = $wpdb->prepare( $sql, $item->emulator_id, wp_date('Y'), wp_date('m'), 1 );
 	$wpdb->query( $sql );
+	wp_redirect( $url, 302 );
 	exit;
 } );
