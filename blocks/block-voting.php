@@ -170,7 +170,7 @@ function emuzone_voting_rating ( string $vote_id ) {
 	if ( $value === false )
 	{
 		global $wpdb;
-		$result = $wpdb->get_var( $wpdb->prepare( 'SELECT AVG(rating) FROM '.$wpdb->prefix.'ezvotes WHERE emulator_id="%s" AND vote_date > ( NOW() - INTERVAL 3 YEAR )', $vote_id ) );
+		$result = $wpdb->get_var( $wpdb->prepare( 'SELECT AVG(rating) FROM '.$wpdb->prefix.'ezvotes WHERE emulator_id=%s AND vote_date > ( NOW() - INTERVAL 3 YEAR )', $vote_id ) );
 		$value = floatval( $result );
 		wp_cache_set( 'rating_' . $vote_id, $value, 'emuzone_voting', EMUZONE_CACHE_TTL );
 	}
@@ -192,7 +192,7 @@ function emuzone_voting_count ( string $vote_id ) {
 	if ( $value === false )
 	{
 		global $wpdb;
-		$result = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM '.$wpdb->prefix.'ezvotes WHERE emulator_id="%s" AND vote_date > ( NOW() - INTERVAL 3 YEAR )', $vote_id ) );
+		$result = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM '.$wpdb->prefix.'ezvotes WHERE emulator_id=%s AND vote_date > ( NOW() - INTERVAL 3 YEAR )', $vote_id ) );
 		$value = intval( $result );
 		wp_cache_set( 'count_' . $vote_id, $value, 'emuzone_voting', EMUZONE_CACHE_TTL );
 	}
