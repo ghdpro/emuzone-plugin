@@ -6,13 +6,13 @@ require_once( plugin_dir_path( __DIR__ ) . '/blocks/block-download.php' );
 
 if ( ! function_exists( 'html_selection_box' ) ) :
 	function html_selection_box( string $name = '', array $options = array(), $selected = null ): string {
-		$result = '<select name="' . $name . '" id="' . $name . '">';
+		$result = '<select name="' . $name . '" id="' . esc_attr( $name ) . '">';
 		foreach ( $options as $key => $value ) {
-			$result .= '<option value="' . $key . '"';
+			$result .= '<option value="' . esc_attr( $key ) . '"';
 			if ( $key == $selected ) {
 				$result .= ' selected="selected"';
 			}
-			$result .= '>' . $value . '</option>';
+			$result .= '>' . esc_html( $value ) . '</option>';
 		}
 		$result .= '</select>';
 		return $result;
@@ -137,7 +137,7 @@ class ezDownloads extends CustomAdminPage {
 		curl_setopt( $ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; Emulator-Zone v1.0; https://wwww.emulator-zone.com/)' );
 		$data = curl_exec( $ch );
 		if ( $data === false || ( curl_errno( $ch ) !== 0 ) ) {
-			$this->set_message( 'error', curl_error( $ch ) );
+			$this->set_message( 'error', esc_html( curl_error( $ch ) ) );
 			wp_safe_redirect( admin_url( 'admin.php?page=fileman' ) );
 			exit;
 		}
@@ -174,7 +174,7 @@ class ezDownloads extends CustomAdminPage {
 				'filename' => $filename,
 				'origin_url' => $url,
 				'user_id' => get_current_user_id(),
-				'updated' => date( 'Y-m-d H:i:s' ),
+				'updated' => wp_date( 'Y-m-d H:i:s' ),
 			) );
 		if ( $result !== false ) {
 			// This message may be overwritten bij auto_link()
@@ -224,7 +224,7 @@ class ezDownloads extends CustomAdminPage {
 				'size' => $_FILES[ 'file' ][ 'size' ],
 				'filename' => $_FILES[ 'file' ][ 'name' ],
 				'user_id' => get_current_user_id(),
-				'updated' => date( 'Y-m-d H:i:s' ),
+				'updated' => wp_date( 'Y-m-d H:i:s' ),
 			) );
 		if ( $result !== false ) {
 			$this->set_message( 'success', 'File <b>' . esc_html( $_FILES[ 'file' ][ 'name' ] ) . '</b> (' . filesize_human( $_FILES[ 'file' ][ 'size' ] )[0] . ' ' . filesize_human( $_FILES[ 'file' ][ 'size' ] )[1] . ') successfully uploaded.' );
@@ -346,7 +346,7 @@ class ezDownloads extends CustomAdminPage {
 			// No previous upload
 			$result = $wpdb->update( $wpdb->prefix . "ezdownloads", array(
 				'emulator_id' => $emulator_id,
-				'updated' => date( 'Y-m-d H:i:s' ),
+				'updated' => wp_date( 'Y-m-d H:i:s' ),
 			), array( 'id' => $id ) );
 			if ( $result === false ) {
 				wp_die('Update download (no previous values) query failed.');
@@ -371,7 +371,7 @@ class ezDownloads extends CustomAdminPage {
 				'homepage2_checked' => $prev->homepage2_checked,
 				'source1_url' => $prev->source1_url,
 				'source2_url' => $prev->source2_url,
-				'updated' => date( 'Y-m-d H:i:s' ),
+				'updated' => wp_date( 'Y-m-d H:i:s' ),
 			), array( 'id' => $id ) );
 			if ( $result === false ) {
 				wp_die('Update download (with previous values) query failed.');
@@ -402,7 +402,7 @@ class ezDownloads extends CustomAdminPage {
 		// Finally redirect to edit form
 		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezdownloads WHERE id = %d", $id ) );
 		$handle = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezfiles WHERE id = %d", $emulator_id ) );
-		$this->set_message( 'success', 'Linked <b>' . esc_html( $item->filename ) . '</b> to handle <b>' . $handle->emulator_id . '</b>.' );
+		$this->set_message( 'success', 'Linked <b>' . esc_html( $item->filename ) . '</b> to handle <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
 		wp_safe_redirect( admin_url( 'admin.php?page=ezdownloads&action=edit&id=' . $id ) );
 		exit;
 	}
@@ -419,14 +419,14 @@ class ezDownloads extends CustomAdminPage {
 			array(
 				'version' => ( $_REQUEST[ 'version' ] ?? null ),
 				'release_date' => ( $_REQUEST[ 'release_date' ] ?? null ),
-				'filename' => $_REQUEST[ 'filename' ],
-				'name' => $_REQUEST[ 'name' ],
+				'filename' => sanitize_text_field ( $_REQUEST[ 'filename' ] ),
+				'name' => sanitize_text_field ( $_REQUEST[ 'name' ] ),
 				'description' => ( $_REQUEST[ 'description' ] ?? null ),
 				'platform' => ( $_REQUEST[ 'platform' ] ?? null ),
 				'license' => ( $_REQUEST[ 'license' ] ?? null ),
 				'homepage1_url' => ( $_REQUEST[ 'homepage1_url' ] ?? null ),
 				'source1_url' => ( $_REQUEST[ 'source1_url' ] ?? null ),
-				'updated' => date( 'Y-m-d H:i:s' ),
+				'updated' => wp_date( 'Y-m-d H:i:s' ),
 			),
 			array(
 				'id' => $id,
@@ -441,7 +441,7 @@ class ezDownloads extends CustomAdminPage {
 		}
 	}
 
-	protected function process_active() {
+	protected function process_active(): void {
 		global $wpdb;
 		$id = intval( $_REQUEST['id']  ?? 0 );
 		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE id = %d", $id ) );

@@ -14,7 +14,7 @@
 			<td>
 				<input class="regular-text" type="search"
 			            name="q" placeholder="Search handle..."
-			            hx-post="<?php echo esc_html( admin_url( 'admin-post.php' ) . '?action=ezdownloads&form_action=search&id=' . esc_html( $item->id ) . '&_wpnonce=' . wp_create_nonce( 'ezdownloadssearch' ) ); ?>"
+			            hx-post="<?php echo esc_url( admin_url( 'admin-post.php' ) . '?action=ezdownloads&form_action=search&id=' . esc_url( $item->id ) . '&_wpnonce=' . wp_create_nonce( 'ezdownloadssearch' ) ); ?>"
 			            hx-trigger="input changed delay:500ms, search"
 			            hx-target="#results"
 			            hx-indicator=".htmx-indicator">

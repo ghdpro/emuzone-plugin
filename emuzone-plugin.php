@@ -373,7 +373,7 @@ add_filter( 'template_include', function( $template ) {
 	);
 	// Count download (ezcount table)
 	$sql = "INSERT INTO {$wpdb->prefix}ezcount (emulator_id,date_year,date_month,downloads) VALUES (%d,%d,%d,%d) ON DUPLICATE KEY UPDATE downloads = downloads + 1";
-	$sql = $wpdb->prepare( $sql, $item->emulator_id, date('Y'), date('m'), 1 );
+	$sql = $wpdb->prepare( $sql, $item->emulator_id, wp_date('Y'), wp_date('m'), 1 );
 	$wpdb->query( $sql );
 	exit;
 } );

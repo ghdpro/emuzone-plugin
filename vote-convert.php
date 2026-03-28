@@ -31,7 +31,7 @@ if ( $result ) {
 		{
 			$data = array();
 			$data['emulator_id'] = $row['handle'];
-			$data['user_hash'] = wp_hash($row['ip_a'].'.'.$row['ip_b'].'.'.$row['ip_d'].'.'.$row['ip_d']);
+			$data['user_hash'] = wp_hash($row['ip_a'].'.'.$row['ip_b'].'.'.$row['ip_c'].'.'.$row['ip_d']);
 			$data['rating'] = $row['rating'];
 			$data['vote_date'] = sprintf( '%02d', $row['year'] ). '-' .sprintf( '%02d', $row['month'] ) . '-' . sprintf( '%02d', $row['day']) . ' 00:00:00';
 			$wpdb->replace( $wpdb->prefix . 'ezvotes', $data );

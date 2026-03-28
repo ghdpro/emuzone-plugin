@@ -109,27 +109,27 @@ function emuzone_voting_response() {
 	// Verify nonce
 	if ( !isset( $_POST['emuzone_voting_nonce'] ) || !wp_verify_nonce( $_POST['emuzone_voting_nonce'], 'emuzone_voting_nonce' ) ) {
 		http_response_code( 400 );
-		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
 	// Verify emulator
 	if ( !isset( $_POST['emulator'] ) ) {
 		http_response_code( 400 );
-		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
 	$emulator_id = filter_emulator_id( $_POST['emulator'] );
 	if ( empty( $emulator_id ) ) {
 		http_response_code( 400 );
-		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
 	// Verify redirect path
 	if ( !isset( $_POST['redirect'] ) ) {
 		http_response_code( 400 );
-		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
 	$url = parse_url( $_POST['redirect'] );
 	if ( $url === false ) {
 		http_response_code( 400 );
-		die( '<h1>Bad Request</h2>Try reloading the page where you came from.' );
+		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
 	$path = $url['path'];
 	// Verify rating - if invalid quietly redirect to referring page (most common cause: no rating selected)
@@ -217,7 +217,7 @@ function emuzone_voting_display( float $rating, int $count = null, string $prefi
 		}
 	}
 	?>
-	<p class="voting align-items-center" aria-label="<?php echo $stars; ?> stars out of 5">
+	<p class="voting align-items-center" aria-label="<?php echo esc_attr( $stars ); ?> stars out of 5">
 		<?php if ( !$emuzone_voting_svg_output ) { ?>
 		<svg width="0" height="0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 			<defs>
@@ -235,7 +235,7 @@ function emuzone_voting_display( float $rating, int $count = null, string $prefi
 			}
 		?>
 	<?php
-	echo $prefix;
+	echo esc_html( $prefix );
 	for ( $i = 1; $i <= 5; $i++ ) {
 		if ( $i <= $stars ) {
 			?>
