@@ -401,8 +401,13 @@ class ezDownloads extends CustomAdminPage {
 		$this->do_link( $id, $emulator_id );
 		// Finally redirect to edit form
 		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezdownloads WHERE id = %d", $id ) );
+		if ( ! $item ) {
+			wp_die('Download ' . esc_html( $id  ) . ' not found.');
+		}
 		$handle = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . "ezfiles WHERE id = %d", $emulator_id ) );
-		$this->set_message( 'success', 'Linked <b>' . esc_html( $item->filename ) . '</b> to handle <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
+		if ( ! $handle ) {
+			wp_die('Handle ' . esc_html( $id  ) . ' not found.');
+		}		$this->set_message( 'success', 'Linked <b>' . esc_html( $item->filename ) . '</b> to handle <b>' . esc_html( $handle->emulator_id ) . '</b>.' );
 		wp_safe_redirect( admin_url( 'admin.php?page=ezdownloads&action=edit&id=' . $id ) );
 		exit;
 	}
@@ -445,6 +450,9 @@ class ezDownloads extends CustomAdminPage {
 		global $wpdb;
 		$id = intval( $_REQUEST['id']  ?? 0 );
 		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE id = %d", $id ) );
+		if ( ! $item ) {
+			wp_die('Download ' . esc_html( $id  ) . ' not found.');
+		}
 		$handle = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ezfiles' . " WHERE id = %d", $item->emulator_id ) );
 		if ( $handle->active_file != $id ) {
 			$wpdb->update( $wpdb->prefix . 'ezfiles', array(
@@ -465,6 +473,9 @@ class ezDownloads extends CustomAdminPage {
 		global $wpdb;
 		$id = intval( $_REQUEST['id']  ?? 0 );
 		$item = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->get_menu_slug() . " WHERE id = %d", $id ) );
+		if ( ! $item ) {
+			wp_die('Download ' . esc_html( $id  ) . ' not found.');
+		}
 		// If active_file, update it to next latest download
 		$handle = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ezfiles' . " WHERE id = %d", $item->emulator_id ) );
 		if ( $wpdb->num_rows > 0 ) {
@@ -512,7 +523,7 @@ class ezDownloads_List_Table extends WP_List_Table {
 	}
 
 	function get_columns() {
-		$columns = array(
+		return array(
 			'handle'    => 'Handle',
 			'name'      => 'Name',
 			'filename'  => 'File',
@@ -520,11 +531,9 @@ class ezDownloads_List_Table extends WP_List_Table {
 			'user_id'   => 'Added by',
 			'updated'   => 'Last Modified'
 		);
-
-		return $columns;
 	}
 
-	public function prepare_items() {
+	public function prepare_items(): void {
 		$this->_column_headers = array(
 			$this->get_columns(),
 			array(),
@@ -566,19 +575,19 @@ class ezDownloads_List_Table extends WP_List_Table {
 		}
 	}
 
-	function column_name( $item ) {
+	function column_name( $item ): string {
 		$actions = array();
 		if ( empty( $item[ 'emulator_id' ] ) ) {
-			$actions['link'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Link</a>','link', $item['id'] );
+			$actions['link'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Link</a>','link', esc_attr( $item['id'] ) );
 		} else {
-			$actions['edit'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Edit</a>','edit', $item['id'] );
+			$actions['edit'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Edit</a>','edit', esc_attr( $item['id'] ) );
 		}
 
 		if ( ! empty( $item[ 'active_file' ] ) && ( $item[ 'active_file' ] != $item['id'] ) ) {
-			$actions['active'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Set Active</a>', 'active', $item['id'] );
+			$actions['active'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Set Active</a>', 'active', esc_attr( $item['id'] ) );
 		}
 
-		$actions['delete'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Delete</a>', 'delete', $item['id'] );
+		$actions['delete'] = sprintf( '<a href="?page=ezdownloads&action=%s&id=%s">Delete</a>', 'delete', esc_attr( $item['id'] ) );
 
 		$name = $item[ 'name' ] . ' ' . $item[ 'version' ];
 		$style = '';
@@ -586,14 +595,14 @@ class ezDownloads_List_Table extends WP_List_Table {
 			$style = ' style="color: #A0A5AA"';
 		}
 		$url = get_site_url() . '/download/' . $item[ 'checksum_sha256' ];
-		return sprintf( '<a target="_blank" %1s href="%2$s">%3$s</a> %4$s', $style, $url, $name, $this->row_actions( $actions ) );
+		return sprintf( '<a target="_blank" %1s href="%2$s">%3$s</a> %4$s', $style, esc_url( $url ), esc_html( $name ), $this->row_actions( $actions ) );
 	}
 
-	function column_filename( $item ) {
+	function column_filename( $item ): string {
 		return esc_html( $item[ 'filename' ] ).'<br> ('. filesize_human( $item[ 'size' ] )[0] . ' ' . filesize_human( $item[ 'size' ] )[1] .')';
 	}
 
-	function column_homepage( $item ) {
+	function column_homepage( $item ): string {
 		$result = '';
 		if ( !empty ( $item[ 'homepage1_url' ] ) ) {
 			$result .= sprintf( ' <a target="_blank" rel="noopener" href="%s"><span class="dashicons dashicons-admin-home"></span></a> ', esc_url( $item[ 'homepage1_url' ] ) );
@@ -608,7 +617,7 @@ class ezDownloads_List_Table extends WP_List_Table {
 		return $result;
 	}
 
-	public static function get_items( $per_page = 50, $page_number = 1 ) {
+	public static function get_items( $per_page = 50, $page_number = 1 ): array|null|object {
 		global $wpdb;
 
 		$sql = "SELECT {$wpdb->prefix}ezdownloads.*,{$wpdb->prefix}ezfiles.emulator_id AS handle,{$wpdb->prefix}ezfiles.active_file FROM {$wpdb->prefix}ezdownloads";
@@ -621,23 +630,19 @@ class ezDownloads_List_Table extends WP_List_Table {
 			$where .= $wpdb->prefix . 'ezdownloads.name LIKE "%s" ';
 			$sql .= $wpdb->prepare( $where, $search, $search, $search );
 		}
-		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			$sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
-			$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
-			if ( $_REQUEST['orderby'] == 'name' ) {
-				// When sorting by name, sort by version too
-				$sql .= ', version ';
-				$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
-			}
-		} else {
-			// Default sort order
-			$sql .= ' ORDER BY updated DESC';
+		$table = new ezDownloads_List_Table();
+		$orderby = sanitize_key( wp_unslash( $_REQUEST['orderby'] ) ?? 'updated' );
+		$order = sanitize_key( $_REQUEST['order'] ?? 'desc' );
+		if ( ! array_key_exists( $orderby, $table->get_columns() ) ) {
+			$orderby = 'updated';
 		}
+		if ( ! in_array( $order, array( 'asc', 'desc' ), true ) ) {
+			$order = 'desc';
+		}
+		$sql .= " ORDER BY {$orderby} {$order}";
 		$sql    .= ' LIMIT ' . $per_page;
 		$sql    .= ' OFFSET ' . ( $page_number - 1 ) * $per_page;
-		$result = $wpdb->get_results( $sql, 'ARRAY_A' );
-
-		return $result;
+		return $wpdb->get_results( $sql, 'ARRAY_A' );
 	}
 
 	public static function record_count() {
@@ -661,13 +666,13 @@ class ezDownloads_List_Table extends WP_List_Table {
 
 	protected function usort_reorder( $a, $b ) {
 		// If no order specified, default to "updated"
-		$orderby = $_REQUEST['orderby'] ?? 'updated';
+		$orderby = sanitize_key( wp_unslash ( $_REQUEST['orderby'] ?? 'updated' ) );
 
 		// If no direction specified, default to "desc"
-		$order = $_REQUEST['order'] ?? 'desc';
+		$order = sanitize_key( wp_unslash( $_REQUEST['order'] ?? 'desc' ) );
 
 		// Determine sort order
-		$result = strcmp( $a[ $orderby ], $b[ $orderby ] );
+		$result = strcmp( (string) ( $a[ $orderby ] ?? '' ), (string) ( $b[ $orderby ] ?? '' ) );
 
 		// Send final sort direction to usort
 		return ( $order === 'asc' ) ? $result : - $result;

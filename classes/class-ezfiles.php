@@ -205,18 +205,16 @@ class ezFiles_List_Table extends WP_List_Table {
 		) );
 	}
 
-	function get_columns() {
-		$columns = array(
+	public function get_columns() {
+		return array(
 			'emulator_id' => 'Handle',
 			'filename'    => 'Active File',
 			'user_id'     => 'Added by',
 			'updated'     => 'Last Modified'
 		);
-
-		return $columns;
 	}
 
-	public function prepare_items() {
+	public function prepare_items(): void {
 		$this->_column_headers = array(
 			$this->get_columns(),
 			array(),
@@ -244,7 +242,7 @@ class ezFiles_List_Table extends WP_List_Table {
 		) );
 	}
 
-	public function column_default( $item, $column_name ) {
+	public function column_default( $item, $column_name ): string {
 		switch ( $column_name ) {
 			case 'user_id':
 				$user = get_user_by( 'id', $item[ $column_name ] );
@@ -257,29 +255,29 @@ class ezFiles_List_Table extends WP_List_Table {
 		}
 	}
 
-	function column_emulator_id( $item ) {
+	function column_emulator_id( $item ): string {
 		$actions = array(
-			'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id'] ),
+			'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', esc_attr( $_REQUEST['page'] ), 'edit', esc_attr( $item['id'] ) ),
 		);
 		// Don't show delete link if not eligible for deletion anyway
 		if ( $item['active_file'] == 0 ) {
-			$actions['delete'] = sprintf( '<a href="?page=%s&action=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id'] );
+			$actions['delete'] = sprintf( '<a href="?page=%s&action=%s&id=%s">Delete</a>', esc_attr( $_REQUEST['page'] ), 'delete', esc_attr( $item['id'] ) );
 		}
-		return sprintf( '%1$s %2$s', $item['emulator_id'], $this->row_actions( $actions ) );
+		return sprintf( '%1$s %2$s', esc_html( $item['emulator_id'] ), $this->row_actions( $actions ) );
 	}
 
-	function column_filename( $item ) {
+	function column_filename( $item ): string {
 		if ( ! empty( $item['file_id'] ) ) {
 			$actions = array(
-				'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', 'ezdownloads', 'edit', $item['file_id'] ),
+				'edit'   => sprintf( '<a href="?page=%s&action=%s&id=%s">Edit</a>', 'ezdownloads', 'edit', esc_attr( $item['file_id'] ) ),
 			);
 		} else {
 			$actions = array();
 		}
-		return sprintf( '%1$s %2$s', $item['filename'], $this->row_actions( $actions ) );
+		return sprintf( '%1$s %2$s', esc_html( $item['filename'] ), $this->row_actions( $actions ) );
 	}
 
-	public static function get_items( $per_page = 50, $page_number = 1 ) {
+	public static function get_items( $per_page = 50, $page_number = 1 ): array|null|object {
 		global $wpdb;
 
 		$sql = "SELECT {$wpdb->prefix}ezfiles.*,{$wpdb->prefix}ezdownloads.filename,{$wpdb->prefix}ezdownloads.id AS file_id FROM {$wpdb->prefix}ezfiles";
@@ -289,21 +287,22 @@ class ezFiles_List_Table extends WP_List_Table {
 			$where = ' WHERE ' . $wpdb->prefix . 'ezfiles.emulator_id LIKE "%s" ';
 			$sql .= $wpdb->prepare( $where, $search );
 		}
-		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			$sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
-			$sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ASC';
-		} else {
-			// Default sort order
-			$sql .= ' ORDER BY updated DESC';
+		$table = new ezFiles_List_Table();
+		$orderby = sanitize_key( wp_unslash( $_REQUEST['orderby'] ) ?? 'updated' );
+		$order = sanitize_key( $_REQUEST['order'] ?? 'desc' );
+		if ( ! array_key_exists( $orderby, $table->get_columns() ) ) {
+			$orderby = 'updated';
 		}
+		if ( ! in_array( $order, array( 'asc', 'desc' ), true ) ) {
+			$order = 'desc';
+		}
+		$sql .= " ORDER BY {$orderby} {$order}";
 		$sql    .= ' LIMIT ' . $per_page;
 		$sql    .= ' OFFSET ' . ( $page_number - 1 ) * $per_page;
-		$result = $wpdb->get_results( $sql, 'ARRAY_A' );
-
-		return $result;
+		return $wpdb->get_results( $sql, 'ARRAY_A' );
 	}
 
-	public static function record_count() {
+	public static function record_count(): int {
 		global $wpdb;
 
 		$sql = "SELECT COUNT(*) FROM {$wpdb->prefix}ezfiles";
@@ -315,21 +314,21 @@ class ezFiles_List_Table extends WP_List_Table {
 		// Only initial sort column has sort direction indicated
 		return array(
 			'emulator_id' => array('emulator_id', false, 'Handle', 'Ordered by Handle'),
-			'filename'     => array('filename', false, 'File', 'Ordered by File'),
+			'filename'    => array('filename', false, 'File', 'Ordered by File'),
 			'user_id'     => array('user_id', false, 'User', 'Ordered by User'),
 			'updated'     => array('updated', true, 'Date', 'Ordered by Last Modified', 'desc'),
 		);
 	}
 
-	protected function usort_reorder( $a, $b ) {
+	protected function usort_reorder( $a, $b ): int {
 		// If no order specified, default to "updated"
-		$orderby = $_REQUEST['orderby'] ?? 'updated';
+		$orderby = sanitize_key( wp_unslash ( $_REQUEST['orderby'] ?? 'updated' ) );
 
 		// If no direction specified, default to "desc"
-		$order = $_REQUEST['order'] ?? 'desc';
+		$order = sanitize_key( wp_unslash( $_REQUEST['order'] ?? 'desc' ) );
 
 		// Determine sort order
-		$result = strcmp( $a[ $orderby ], $b[ $orderby ] );
+		$result = strcmp( (string) ( $a[ $orderby ] ?? '' ), (string) ( $b[ $orderby ] ?? '' ) );
 
 		// Send final sort direction to usort
 		return ( $order === 'asc' ) ? $result : - $result;

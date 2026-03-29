@@ -10,7 +10,7 @@ Author URI: https://www.emulator-zone.com/
 License: AGPL v3.0
 */
 
-const EMUZONE_CACHE_TTL = 3600;
+const EMUZONE_CACHE_TTL = 3600 ;
 $legacydb = null;
 
 /**
@@ -124,7 +124,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/legacy-config.php' );
  */
 function emuzone_legacydb_connect(): void {
 	global $legacydb;
-	if ( is_null( $legacydb ) or !( $legacydb instanceof wpdb ) )
+	if ( is_null( $legacydb ) || !( $legacydb instanceof wpdb ) )
 		$legacydb = new wpdb( LEGACY_DB_USER, LEGACY_DB_PASS, LEGACY_DB_NAME, LEGACY_DB_HOST );
 	else
 		$legacydb->check_connection();

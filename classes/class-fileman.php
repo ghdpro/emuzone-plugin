@@ -7,6 +7,9 @@ require_once( plugin_dir_path( __FILE__ ) . '/class-customadminpage.php' );
  */
 class FileMan extends CustomAdminPage {
 
+	public function get_capability(): string {
+		return 'manage_categories';
+	}
 	public function get_menu_title(): string {
 		return 'File Manager';
 	}

@@ -126,12 +126,11 @@ function emuzone_voting_response() {
 		http_response_code( 400 );
 		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
-	$url = parse_url( $_POST['redirect'] );
-	if ( $url === false ) {
+	$path = wp_validate_redirect( wp_sanitize_redirect( $_POST['redirect'] ), '' );
+	if ( empty( $path ) ) {
 		http_response_code( 400 );
 		die( '<h1>Bad Request</h1>Try reloading the page where you came from.' );
 	}
-	$path = $url['path'];
 	// Verify rating - if invalid quietly redirect to referring page (most common cause: no rating selected)
 	if ( !isset( $_POST['vote'] ) || ( intval( $_POST['vote'] ) < 1 ) || ( intval( $_POST['vote'] ) > 10 ) ) {
 		wp_safe_redirect( $path );
@@ -162,7 +161,7 @@ add_action( 'admin_post_nopriv_emuzone_voting_response', 'emuzone_voting_respons
  *
  * @return float
  */
-function emuzone_voting_rating ( string $vote_id ) {
+function emuzone_voting_rating ( string $vote_id ): float {
 	$vote_id = filter_emulator_id( $vote_id );
 	if ( empty( $vote_id ) )
 		return 0;
@@ -184,7 +183,7 @@ function emuzone_voting_rating ( string $vote_id ) {
  *
  * @return int
  */
-function emuzone_voting_count ( string $vote_id ) {
+function emuzone_voting_count ( string $vote_id ): int {
 	$vote_id = filter_emulator_id( $vote_id );
 	if ( empty( $vote_id ) )
 		return 0;
@@ -208,8 +207,9 @@ function emuzone_voting_count ( string $vote_id ) {
  *
  * @return void
  */
-function emuzone_voting_display( float $rating, int $count = null, string $prefix = '' ) {
+function emuzone_voting_display( float $rating, int $count = null, string $prefix = '' ): void {
 	global $emuzone_voting_svg_output;
+	$stars = 0.5;
 	$awards = ["0" => 0.5, "5.7" => 1, "6.1" => 1.5, "6.5" => 2, "6.9" => 2.5, "7.3" => 3, "7.7" => 3.5, "8.1" => 4, "8.5" => 4.5, "8.9" => 5];
 	foreach ( $awards as $key => $value ) {
 		if ( $rating >= floatval($key) ) {
@@ -240,19 +240,19 @@ function emuzone_voting_display( float $rating, int $count = null, string $prefi
 		if ( $i <= $stars ) {
 			?>
 			<svg class="v-star active" width="16" height="16" viewBox="0 0 32 32">
-				<use xlink:href="#star"></use>
+				<use href="#star"></use>
 			</svg>
 			<?php
 		} elseif ( $i <= ( $stars + 0.5 ) ) {
 			?>
 			<svg class="v-star active" width="16" height="16" viewBox="0 0 32 32">
-				<use xlink:href="#star" fill="url(#half)"></use>
+				<use href="#star" fill="url(#half)"></use>
 			</svg>
 			<?php
 		} else {
 			?>
 			<svg class="v-star" width="16" height="16" viewBox="0 0 32 32">
-				<use xlink:href="#star"></use>
+				<use href="#star"></use>
 			</svg>
 			<?php
 		}

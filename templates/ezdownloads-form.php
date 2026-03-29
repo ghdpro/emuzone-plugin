@@ -15,7 +15,7 @@
 			</tr>
 			<tr>
 				<th scope="row"><label for="release_date">Release date</label></th>
-				<td><input name="release_date" id="release_date" type="text" class="regular-text" value="<?php echo esc_attr( $item->release_date ?? date( 'Y-m-d' ) ); ?>">
+				<td><input name="release_date" id="release_date" type="text" class="regular-text" value="<?php echo esc_attr( $item->release_date ?? wp_date( 'Y-m-d' ) ); ?>">
 				<span class="descriptiopn" style="color: #A0A5AA"><br>The release date of the emulator download. Defaults to today's date, but please change to match actual date.</span></td>
 			</tr>
 			<tr>

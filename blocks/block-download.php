@@ -1,7 +1,5 @@
 <?php
 
-require_once( plugin_dir_path( __DIR__ ) . 'emuzone-plugin.php' );
-
 /**
  * Callback for downloads block. Displays downloads from database (or manual entry).
  *
@@ -130,7 +128,7 @@ function emuzone_download_loop( array $downloads ) {
 					strval( $data['description'] ),
 					$platformtypes[ $data['platform'] ] ?? '-',
 					$licensetypes[ $data['license'] ] ?? '-',
-					( ! empty( $data['release_date'] ) ? date( 'M j, Y', strtotime( $data['release_date'] ) ) : '-'),
+					( ! empty( $data['release_date'] ) ? wp_date( 'M j, Y', strtotime( $data['release_date'] ) ) : '-'),
 					// Get real filesize with: @filesize( EMUZONE_DOWNLOAD_PATH . $data['checksum_sha256'] )
 					// But it's faster to use database value
 					filesize_human( $data['size'] ),
